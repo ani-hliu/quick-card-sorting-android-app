@@ -9,13 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".UxResearcher.UxReportActivity"></activity>
+        <activity android:name=".UxResearcher.UxReportActivity" />
         <activity android:name=".Participants.PartiReviewActivity" />
         <activity android:name=".Participants.PartiSortActivity" />
         <activity android:name=".Participants.PartiWelcomeActivity" />
         <activity android:name=".UxResearcher.UxShareActivity" />
-        <activity android:name=".UxResearcher.UxLabelSetActivity" />
-        <activity android:name=".UxResearcher.UxCategorySetActivity" />
         <activity android:name=".UxResearcher.UxProjectSettingsActivity" />
         <activity android:name=".Participants.PartiMainActivity" />
         <activity android:name=".UxResearcher.UxMainActivity" />
