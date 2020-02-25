@@ -26,6 +26,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
 
     String categories, labels;
     EditText categoriesTextView,labelsTextView,projectTitleTextView;
+    String timestamp;
 
     FirebaseFirestore firebaseFirestore;
 
@@ -51,10 +52,13 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
 
     public void submitProject(View view){
 
-        String[] categoriesArray = categoriesTextView.getText().toString().split("\n");
-        String[] labelsArray = labelsTextView.getText().toString().split("\n");
+        String categories = categoriesTextView.getText().toString();
+        String labels = labelsTextView.getText().toString();
+
+        String[] categoriesArray = categories.split("\n");
+        String[] labelsArray = labels.split("\n");
         String projectTitle = projectTitleTextView.getText().toString();
-        String timestamp = String.valueOf(Timestamp.now().getSeconds());
+        timestamp = String.valueOf(Timestamp.now().getSeconds());
 
         for (int i=0; i<labelsArray.length;i++){
             Map<String, Integer> label = new HashMap<>();
@@ -82,13 +86,20 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
         Map<String, String> project = new HashMap<>();
         project.put("Project Name",projectTitle);
         project.put("Project ID",timestamp);
+        project.put("Labels",categories);
+        project.put("Categories",labels);
+
 
         firebaseFirestore.collection("projects").document(timestamp).set(project)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                startActivity(new Intent(getApplicationContext(),UxMainActivity.class));
-                finish();
+
+                Intent intent = new Intent(getApplicationContext(),UxShareActivity.class);
+
+                intent.putExtra("Project ID",timestamp);
+                // start the activity
+                startActivity(intent);
             }
         });
     }
