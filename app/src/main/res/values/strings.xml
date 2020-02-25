@@ -12,5 +12,8 @@
     <string name="qr_code">QR Code</string>
     <string name="email">email</string>
     <string name="participant_s_email">Participants\' email, separated by commas.</string>
+    <string name="welcome">Welcome</string>
+    <string name="please_enter_your_unique_code">Please enter your unique code</string>
+    <string name="enter">Enter</string>
 
 </resources>

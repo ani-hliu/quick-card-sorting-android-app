@@ -52,8 +52,11 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
 
     public void submitProject(View view){
 
-        String[] categoriesArray = categoriesTextView.getText().toString().split("\n");
-        String[] labelsArray = labelsTextView.getText().toString().split("\n");
+        String categories = categoriesTextView.getText().toString();
+        String labels = labelsTextView.getText().toString();
+
+        String[] categoriesArray = categories.split("\n");
+        String[] labelsArray = labels.split("\n");
         String projectTitle = projectTitleTextView.getText().toString();
         timestamp = String.valueOf(Timestamp.now().getSeconds());
 
@@ -83,6 +86,9 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
         Map<String, String> project = new HashMap<>();
         project.put("Project Name",projectTitle);
         project.put("Project ID",timestamp);
+        project.put("Labels",categories);
+        project.put("Categories",labels);
+
 
         firebaseFirestore.collection("projects").document(timestamp).set(project)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
