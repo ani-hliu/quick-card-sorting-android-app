@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Qsort</string>
+    <string name="add">ADD</string>
+    <string name="category">Category</string>
+    <string name="label">Label</string>
+    <string name="submit">Submit</string>
+    <string name="projectTitle">Project Title</string>
+    <string name="enterTitle">Please enter project title</string>
+
 </resources>
