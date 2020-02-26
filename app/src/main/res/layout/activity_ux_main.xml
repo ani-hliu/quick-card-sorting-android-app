@@ -40,8 +40,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginLeft="150dp"
                     android:text="Log Out"
-                    android:textAllCaps="false"
-                    android:onClick="logout"/>
+                    android:textAllCaps="false" />
 
             </LinearLayout>
 
@@ -72,7 +71,7 @@
             android:layout_centerInParent="true">
 
             <Button
-                android:id="@+id/btnGuide"
+                android:id="@+id/guide"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -106,8 +105,7 @@
             android:alpha="0.6"
             android:clickable="true"
             android:focusable="true"
-            app:srcCompat="@drawable/plus"
-            android:onClick="addProject" />
+            app:srcCompat="@drawable/plus" />
 
     </RelativeLayout>
 
