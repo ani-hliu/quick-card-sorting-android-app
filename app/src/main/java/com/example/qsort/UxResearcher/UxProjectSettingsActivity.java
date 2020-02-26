@@ -1,13 +1,19 @@
 package com.example.qsort.UxResearcher;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,8 +21,13 @@ import com.example.qsort.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -26,9 +37,16 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
 
     String categories, labels;
     EditText categoriesTextView,labelsTextView,projectTitleTextView;
+    ImageView projectPicture;
     String timestamp;
+    Uri picrureUri;
+
+    static int GALLERY_CODE = 1;
+    static int CAMERA_CODE = 2;
+
 
     FirebaseFirestore firebaseFirestore;
+    StorageReference storageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +56,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
         categoriesTextView = findViewById(R.id.categoryTextView);
         labelsTextView = findViewById(R.id.labelTextView);
         projectTitleTextView = findViewById(R.id.projectTitleTextView);
+        projectPicture = findViewById(R.id.projectPicture);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
 
@@ -52,12 +71,12 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
 
     public void submitProject(View view){
 
-        String categories = categoriesTextView.getText().toString();
-        String labels = labelsTextView.getText().toString();
+        final String categories = categoriesTextView.getText().toString();
+        final String labels = labelsTextView.getText().toString();
 
         String[] categoriesArray = categories.split("\n");
         String[] labelsArray = labels.split("\n");
-        String projectTitle = projectTitleTextView.getText().toString();
+        final String projectTitle = projectTitleTextView.getText().toString();
         timestamp = String.valueOf(Timestamp.now().getSeconds());
 
         for (int i=0; i<labelsArray.length;i++){
@@ -83,31 +102,120 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
                     });
         }
 
-        Map<String, String> project = new HashMap<>();
-        project.put("Project Name",projectTitle);
-        project.put("Project ID",timestamp);
-        project.put("Labels",categories);
-        project.put("Categories",labels);
 
+        storageReference = FirebaseStorage.getInstance().getReference().child("project pictures");
+        final StorageReference imageFilePath = storageReference.child(picrureUri.getLastPathSegment());
 
-        firebaseFirestore.collection("projects").document(timestamp).set(project)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+        imageFilePath.putFile(picrureUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
-            public void onSuccess(Void aVoid) {
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Map project = new HashMap<>();
+                        project.put("Project Name",projectTitle);
+                        project.put("Project ID",timestamp);
+                        project.put("Participants",0);
+                        project.put("Project Picture",picrureUri.toString());
+                        project.put("Labels",categories);
+                        project.put("Categories",labels);
 
-                Intent intent = new Intent(getApplicationContext(),UxShareActivity.class);
+                        firebaseFirestore.collection("projects").document(timestamp).set(project)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
 
-                intent.putExtra("Project ID",timestamp);
-                // start the activity
-                startActivity(intent);
+                                        Intent intent = new Intent(getApplicationContext(),UxShareActivity.class);
+
+                                        intent.putExtra("Project ID",timestamp);
+                                        // start the activity
+                                        startActivity(intent);
+                                    }
+                                });
+
+                    }
+                });
+
             }
         });
+
     }
+
+    public void addPicture(View view){
+
+        final String[] items = {"Camera","Gallery"};
+        AlertDialog.Builder listDialog =
+                new AlertDialog.Builder(UxProjectSettingsActivity.this);
+        listDialog.setTitle("Choose:");
+        listDialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                switch(which){
+                    case 0:
+                        openCamera();
+                        break;
+                    case 1:
+                        openGallery();
+                        break;
+                }
+            }
+        });
+        listDialog.show();
+    }
+
+    private void openCamera(){
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent,CAMERA_CODE);
+
+    }
+
+    private void openGallery() {
+
+        Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        galleryIntent.setType("image/*");
+        startActivityForResult(galleryIntent,GALLERY_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+        if (resultCode == RESULT_OK && requestCode == GALLERY_CODE && data != null) {
+
+            // the user has successfully picked an image
+            // we need to save its reference to a Uri variable
+            picrureUri = data.getData();
+            projectPicture.setImageURI(picrureUri);
+
+        }
+
+        if (resultCode == RESULT_OK && requestCode == CAMERA_CODE && data != null) {
+
+            // the user has successfully picked an image
+            // we need to save its reference to a Uri variable
+            Bundle extras = data.getExtras();
+            if (extras != null) {
+                Bitmap bitmap = (Bitmap) extras.get("data");
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                picrureUri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null, null));
+                //ImgUserPhoto.setImageBitmap(bitmap);
+                projectPicture.setImageURI(picrureUri);
+            }
+
+        }
+    }
+
+
 
     private void showMessage(String message) {
 
         Toast.makeText(getApplicationContext(),message,Toast.LENGTH_LONG).show();
 
     }
+
+
 
 }
