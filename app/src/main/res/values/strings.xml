@@ -15,5 +15,7 @@
     <string name="welcome">Welcome</string>
     <string name="please_enter_your_unique_code">Please enter your unique code</string>
     <string name="enter">Enter</string>
+    <string name="project_picture">Project picture</string>
+    <string name="add_picture">Add Picture</string>
 
 </resources>
