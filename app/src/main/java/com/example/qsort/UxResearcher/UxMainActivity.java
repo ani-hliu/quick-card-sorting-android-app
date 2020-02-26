@@ -12,5 +12,7 @@ public class UxMainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ux_main);
+
+
     }
 }

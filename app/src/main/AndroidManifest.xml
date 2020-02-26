@@ -18,6 +18,7 @@
         <activity android:name=".Participants.PartiMainActivity" />
         <activity android:name=".UxResearcher.UxMainActivity" />
         <activity android:name=".UxResearcher.UxLoginActivity" />
+        <activity android:name=".UxResearcher.UxRegisterActivity" />
         <activity android:name=".WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
