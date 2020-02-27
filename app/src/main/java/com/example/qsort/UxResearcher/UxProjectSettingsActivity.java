@@ -14,26 +14,26 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.qsort.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
+<<<<<<< HEAD
 
 import com.google.firebase.auth.FirebaseAuth;
 
 import com.google.firebase.firestore.DocumentReference;
+=======
+>>>>>>> Minor change
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class UxProjectSettingsActivity extends AppCompatActivity {
@@ -42,7 +42,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
     EditText categoriesTextView,labelsTextView,projectTitleTextView;
     ImageView projectPicture;
     String timestamp;
-    Uri picrureUri;
+    Uri pictureUri;
 
     String uid;
     private FirebaseAuth mAuth;
@@ -112,44 +112,30 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
                     });
         }
 
+        if(pictureUri == null){
+            /**TODO
+             * User didn't upload any profile picutre
+             */
+            storeProject(projectTitle,"");
+        }
+        else{
+            storageReference = FirebaseStorage.getInstance().getReference().child("project pictures");
+            final StorageReference imageFilePath = storageReference.child(pictureUri.getLastPathSegment());
 
-        storageReference = FirebaseStorage.getInstance().getReference().child("project pictures");
-        final StorageReference imageFilePath = storageReference.child(picrureUri.getLastPathSegment());
+            imageFilePath.putFile(pictureUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            storeProject(projectTitle, uri.toString());
+                        }
+                    });
+                }
+            });
+        }
+>>>>>>> Minor change
 
-        imageFilePath.putFile(picrureUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        Map project = new HashMap<>();
-                        project.put("Project Name",projectTitle);
-                        project.put("Project ID",uid+"_"+timestamp);
-                        project.put("Participants",0);
-                        project.put("Designer",uid);
-                        project.put("timestamp",timestamp);
-                        project.put("Project Picture",picrureUri.toString());
-                        project.put("Labels",categories);
-                        project.put("Categories",labels);
-
-                        firebaseFirestore.collection("projects").document(timestamp).set(project)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-
-                                        Intent intent = new Intent(getApplicationContext(),UxShareActivity.class);
-
-                                        intent.putExtra("Project ID",timestamp);
-                                        // start the activity
-                                        startActivity(intent);
-                                    }
-                                });
-
-                    }
-                });
-
-            }
-        });
 
     }
 
@@ -198,8 +184,8 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
 
             // the user has successfully picked an image
             // we need to save its reference to a Uri variable
-            picrureUri = data.getData();
-            projectPicture.setImageURI(picrureUri);
+            pictureUri = data.getData();
+            projectPicture.setImageURI(pictureUri);
 
         }
 
@@ -212,12 +198,38 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
                 Bitmap bitmap = (Bitmap) extras.get("data");
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-                picrureUri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null, null));
+                pictureUri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null, null));
                 //ImgUserPhoto.setImageBitmap(bitmap);
-                projectPicture.setImageURI(picrureUri);
+                projectPicture.setImageURI(pictureUri);
             }
 
         }
+    }
+
+
+    public void storeProject(String projectTitle, String uri){
+        Map project = new HashMap<>();
+        project.put("Project Name",projectTitle);
+        project.put("Project ID",timestamp);
+        project.put("Participants",0);
+        project.put("Project Picture",uri);
+        project.put("Labels",categories);
+        project.put("Categories",labels);
+
+
+
+        firebaseFirestore.collection("projects").document(timestamp).set(project)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                        Intent intent = new Intent(getApplicationContext(),UxShareActivity.class);
+
+                        intent.putExtra("Project ID",timestamp);
+                        // start the activity
+                        startActivity(intent);
+                    }
+                });
     }
 
     private void showMessage(String message) {
@@ -225,6 +237,8 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(),message,Toast.LENGTH_LONG).show();
 
     }
+
+
 
 
 

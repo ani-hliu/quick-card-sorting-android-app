@@ -193,6 +193,7 @@ public class UxMainActivity<map> extends AppCompatActivity {
             // start the activity
             startActivity(intent);
 
+
         }
     }
 
