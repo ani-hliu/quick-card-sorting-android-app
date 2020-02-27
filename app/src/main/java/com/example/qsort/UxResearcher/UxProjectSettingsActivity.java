@@ -21,6 +21,9 @@ import com.example.qsort.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
+
+import com.google.firebase.auth.FirebaseAuth;
+
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -40,6 +43,9 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
     ImageView projectPicture;
     String timestamp;
     Uri picrureUri;
+
+    String uid;
+    private FirebaseAuth mAuth;
 
     static int GALLERY_CODE = 1;
     static int CAMERA_CODE = 2;
@@ -67,6 +73,10 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
 
         categoriesTextView.setText(categories);
         labelsTextView.setText(labels);
+
+        mAuth = FirebaseAuth.getInstance();
+        uid = mAuth.getCurrentUser().getUid();
+
     }
 
     public void submitProject(View view){
@@ -114,8 +124,10 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
                     public void onSuccess(Uri uri) {
                         Map project = new HashMap<>();
                         project.put("Project Name",projectTitle);
-                        project.put("Project ID",timestamp);
+                        project.put("Project ID",uid+"_"+timestamp);
                         project.put("Participants",0);
+                        project.put("Designer",uid);
+                        project.put("timestamp",timestamp);
                         project.put("Project Picture",picrureUri.toString());
                         project.put("Labels",categories);
                         project.put("Categories",labels);
@@ -207,8 +219,6 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
 
         }
     }
-
-
 
     private void showMessage(String message) {
 
