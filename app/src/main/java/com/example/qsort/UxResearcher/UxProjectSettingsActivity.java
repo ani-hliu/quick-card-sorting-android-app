@@ -92,7 +92,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
             for (int j=0; j<categoriesArray.length;j++){
                 label.put(categoriesArray[j],0);
             }
-            firebaseFirestore.collection(timestamp).document(labelsArray[i])
+            firebaseFirestore.collection(uid+"_"+timestamp).document(labelsArray[i])
                     .set(label)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override

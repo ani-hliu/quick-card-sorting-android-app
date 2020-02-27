@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.qsort.Project;
 import com.example.qsort.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -60,7 +61,7 @@ public class UxMainActivity<map> extends AppCompatActivity {
     private String project_name;
     private String project_image;
     private String project_id;
-    ArrayList<Projects> projectList;
+    ArrayList<Project> projectList;
 
     private RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
@@ -120,7 +121,7 @@ public class UxMainActivity<map> extends AppCompatActivity {
                                 project_name = document.getData().get("Project Name").toString();
                                 project_image = document.getData().get("Project Picture").toString();
                                 project_id = document.getData().get("Project ID").toString();
-                                Projects currentProject = new Projects(project_name, project_image, project_id);
+                                Project currentProject = new Project(project_name, project_image, project_id);
                                 projectList.add(currentProject);
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                             }
