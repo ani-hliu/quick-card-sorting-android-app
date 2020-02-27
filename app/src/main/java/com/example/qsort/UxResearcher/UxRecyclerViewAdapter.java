@@ -42,7 +42,7 @@ public class UxRecyclerViewAdapter extends RecyclerView.Adapter<UxRecyclerViewAd
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, UxReportActivity.class);
-                intent.putExtra("image_url", projects.get(position).getProject_image());
+                intent.putExtra("project_id", projects.get(position).getProject_id());
                 mContext.startActivity(intent);
             }
         });

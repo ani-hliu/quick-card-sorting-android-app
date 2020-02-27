@@ -117,8 +117,8 @@ public class UxMainActivity<map> extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                project_image = document.getData().get("Project Name").toString();
-                                project_name = document.getData().get("Project Picture").toString();
+                                project_name = document.getData().get("Project Name").toString();
+                                project_image = document.getData().get("Project Picture").toString();
                                 project_id = document.getData().get("Project ID").toString();
                                 Projects currentProject = new Projects(project_name, project_image, project_id);
                                 projectList.add(currentProject);
