@@ -215,7 +215,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
 
 
 
-        firebaseFirestore.collection("projects").document(timestamp).set(project)
+        firebaseFirestore.collection("projects").document(uid+"_"+timestamp).set(project)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
