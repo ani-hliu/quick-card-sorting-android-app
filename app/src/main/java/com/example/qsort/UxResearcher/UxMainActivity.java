@@ -52,19 +52,20 @@ public class UxMainActivity<map> extends AppCompatActivity {
     private static final String TAG = "UxMainActivity";
     private TextView username;
     private TextView bio;
-    private Button btnLogout;
+//    private Button btnLogout;
     private Button btnGuide;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private String userId;
-    ArrayList<PostedPhoto> photoList;
-    private Switch aSwitch;
+    private String project_name;
+    private String project_image;
+    private String project_id;
+    ArrayList<Projects> projectList;
 
     private RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     UxRecyclerViewAdapter recyclerViewAdapter;
 
-    Uri photoURI;
     Context context;
 
     static int FILE_REQUEST_CODE = 1;
@@ -80,12 +81,12 @@ public class UxMainActivity<map> extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         userId = mAuth.getCurrentUser().getUid();
-        photoList = new ArrayList <PostedPhoto> ();
 
         username = findViewById(R.id.username);
         bio = findViewById(R.id.bio);
-        btnLogout = findViewById(R.id.logout);
+//        btnLogout = findViewById(R.id.logout);
         btnGuide = findViewById(R.id.btnGuide);
+        projectList  = new ArrayList<>();
 
         DocumentReference documentReference = db.collection("Users").document(userId);
         documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
@@ -105,29 +106,30 @@ public class UxMainActivity<map> extends AppCompatActivity {
 
         reloadProjects();
 
-
     }
 
     private void reloadProjects() {
-        photoList.clear();
-
-        db.collection("Photos")
-                .whereEqualTo("uid", userId).orderBy("timestamp", Query.Direction.DESCENDING)
+        projectList.clear();
+        db.collection("projects")
+                .whereEqualTo("Designer", userId).orderBy("timestamp", Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                PostedPhoto postedPhoto = document.toObject(PostedPhoto.class);
-                                photoList.add(postedPhoto);
+                                project_image = document.getData().get("Project Name").toString();
+                                project_name = document.getData().get("Project Picture").toString();
+                                project_id = document.getData().get("Project ID").toString();
+                                Projects currentProject = new Projects(project_name, project_image, project_id);
+                                projectList.add(currentProject);
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
 
-                        recyclerViewAdapter = new UxRecyclerViewAdapter(context, photoList);
+                        recyclerViewAdapter = new UxRecyclerViewAdapter(context, projectList);
                         recyclerView.setAdapter(recyclerViewAdapter);
                         recyclerView.setHasFixedSize(true);
                     }

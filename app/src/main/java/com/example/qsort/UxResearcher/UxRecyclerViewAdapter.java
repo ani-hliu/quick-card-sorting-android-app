@@ -6,38 +6,43 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.qsort.R;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class UxRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
-    ArrayList<PostedPhoto> postedPhotos;
+public class UxRecyclerViewAdapter extends RecyclerView.Adapter<UxRecyclerViewAdapter.MyViewHolder> {
+    ArrayList<Projects> projects;
     private Context mContext;
 
-    public RecyclerViewAdapter(Context context, ArrayList<PostedPhoto> postedPhotos){
+    public UxRecyclerViewAdapter(Context context, ArrayList<Projects> projects){
         this.mContext = context;
-        this.postedPhotos = postedPhotos;
+        this.projects = projects;
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.image_view,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.project_view,parent,false);
         MyViewHolder myViewHolder = new MyViewHolder(view);
         return myViewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
-        Picasso.get().load(postedPhotos.get(position).getStorageRef()).into(holder.imageView);
+        holder.textView.setText(projects.get(position).getProject_name());
+        Picasso.get().load(projects.get(position).getProject_image()).into(holder.imageView);
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, CommentActivity.class);
-                intent.putExtra("image_url", postedPhotos.get(position).getStorageRef());
+                Intent intent = new Intent(mContext, UxReportActivity.class);
+                intent.putExtra("image_url", projects.get(position).getProject_image());
                 mContext.startActivity(intent);
             }
         });
@@ -45,16 +50,18 @@ public class UxRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdap
 
     @Override
     public int getItemCount() {
-        return postedPhotos.size();
+        return projects.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
         ImageView imageView;
+        TextView textView;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            imageView = itemView.findViewById(R.id.imageView);
+            imageView = itemView.findViewById(R.id.projectImageView);
+            textView = itemView.findViewById(R.id.projectName);
         }
     }
 }
