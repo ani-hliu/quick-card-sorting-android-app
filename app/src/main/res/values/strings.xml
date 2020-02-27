@@ -17,5 +17,6 @@
     <string name="enter">Enter</string>
     <string name="project_picture">Project picture</string>
     <string name="add_picture">Add Picture</string>
+    <string name="back">back</string>
 
 </resources>

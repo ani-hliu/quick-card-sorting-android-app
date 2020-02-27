@@ -20,13 +20,10 @@ import com.example.qsort.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
-<<<<<<< HEAD
 
 import com.google.firebase.auth.FirebaseAuth;
 
 import com.google.firebase.firestore.DocumentReference;
-=======
->>>>>>> Minor change
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -134,8 +131,6 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
                 }
             });
         }
->>>>>>> Minor change
-
 
     }
 
@@ -210,8 +205,10 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
     public void storeProject(String projectTitle, String uri){
         Map project = new HashMap<>();
         project.put("Project Name",projectTitle);
-        project.put("Project ID",timestamp);
+        project.put("Project ID",uid+"_"+timestamp);
         project.put("Participants",0);
+        project.put("Designer",uid);
+        project.put("timestamp",timestamp);
         project.put("Project Picture",uri);
         project.put("Labels",categories);
         project.put("Categories",labels);
@@ -225,7 +222,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
 
                         Intent intent = new Intent(getApplicationContext(),UxShareActivity.class);
 
-                        intent.putExtra("Project ID",timestamp);
+                        intent.putExtra("Project ID",uid+"_"+timestamp);
                         // start the activity
                         startActivity(intent);
                     }

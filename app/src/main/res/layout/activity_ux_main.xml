@@ -71,11 +71,11 @@
             android:layout_centerInParent="true">
 
             <Button
-                android:id="@+id/guide"
+                android:id="@+id/guideButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:text="Need some guide on how to start?"
                 android:textAllCaps="false" />
 
@@ -105,7 +105,8 @@
             android:alpha="0.6"
             android:clickable="true"
             android:focusable="true"
-            app:srcCompat="@drawable/plus" />
+            app:srcCompat="@drawable/plus"
+            android:onClick="addProject"/>
 
     </RelativeLayout>
 

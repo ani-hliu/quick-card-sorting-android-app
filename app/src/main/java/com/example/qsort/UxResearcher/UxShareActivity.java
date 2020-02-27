@@ -54,4 +54,11 @@ public class UxShareActivity extends AppCompatActivity {
         emailTextView.setText("");
     }
 
+    public void backToMain(View view){
+        startActivity(new Intent(getApplicationContext(),UxMainActivity.class));
+        finish();
+    }
+
+
+
 }
