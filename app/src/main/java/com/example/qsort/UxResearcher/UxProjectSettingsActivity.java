@@ -21,7 +21,9 @@ import com.example.qsort.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
+
 import com.google.firebase.auth.FirebaseAuth;
+
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -41,6 +43,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
     ImageView projectPicture;
     String timestamp;
     Uri picrureUri;
+
     String uid;
     private FirebaseAuth mAuth;
 
@@ -216,8 +219,6 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
 
         }
     }
-
-
 
     private void showMessage(String message) {
 
