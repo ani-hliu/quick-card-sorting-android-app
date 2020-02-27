@@ -1,14 +1,18 @@
 package com.example.qsort;
 
+import androidx.annotation.NonNull;
+
 public class Project {
 
-    String name, id,pictureUri;
+    String projectName, projectId,pictureUri, designerUid, timestamp;
     int noParticipants;
     String categories, labels;
 
-    public Project(String name, String id, int noParticipants,String pictureUri, String categories, String labels){
-        this.name = name;
-        this.id = id;
+    public Project(String projectName, String projectId, String designerUid, String timestamp, int noParticipants,String pictureUri, String categories, String labels){
+        this.projectName = projectName;
+        this.projectId = projectId;
+        this.designerUid = designerUid;
+        this.timestamp = timestamp;
         this.noParticipants = noParticipants;
         this.pictureUri = pictureUri;
         this.categories = categories;
@@ -16,12 +20,12 @@ public class Project {
 
     }
 
-    public String getName() {
-        return name;
+    public String getProjectName() {
+        return projectName;
     }
 
-    public String getId() {
-        return id;
+    public String getProjectId() {
+        return projectId;
     }
 
     public int getNoParticipants() {
@@ -38,6 +42,14 @@ public class Project {
 
     public String getLabels() {
         return labels;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public String getDesignerUid() {
+        return designerUid;
     }
 }
 

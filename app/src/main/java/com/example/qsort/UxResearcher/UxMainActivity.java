@@ -84,8 +84,7 @@ public class UxMainActivity<map> extends AppCompatActivity {
 
         username = findViewById(R.id.username);
         bio = findViewById(R.id.bio);
-//        btnLogout = findViewById(R.id.logout);
-        btnGuide = findViewById(R.id.btnGuide);
+        btnGuide = findViewById(R.id.guideButton);
         projectList  = new ArrayList<>();
 
         DocumentReference documentReference = db.collection("Users").document(userId);
@@ -192,6 +191,7 @@ public class UxMainActivity<map> extends AppCompatActivity {
             intent.putExtra("Labels",labels.toString());
             // start the activity
             startActivity(intent);
+
 
         }
     }
