@@ -4,7 +4,9 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -60,9 +62,9 @@ public class UxReportActivity extends AppCompatActivity {
         documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                projectName.setText(documentSnapshot.getString("Project Name"));
-                projectPartiNum.setText(documentSnapshot.getString("Participants"));
-                timestamp = documentSnapshot.getString("timestamp");
+                projectName.setText(documentSnapshot.getData().get("Project Name").toString());
+                projectPartiNum.setText(documentSnapshot.getData().get("Participants").toString());
+                timestamp = documentSnapshot.getData().get("timestamp").toString();
                 SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
                 Date date = new Date(Long.parseLong(timestamp));
                 projectTime.setText(sf.format(date));
@@ -70,5 +72,10 @@ public class UxReportActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void backToMain(View view){
+        startActivity(new Intent(getApplicationContext(),UxMainActivity.class));
+        finish();
     }
 }
