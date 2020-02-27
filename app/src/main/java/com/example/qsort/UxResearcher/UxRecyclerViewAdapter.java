@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.qsort.Project;
 import com.example.qsort.R;
 import com.squareup.picasso.Picasso;
 
@@ -17,10 +18,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class UxRecyclerViewAdapter extends RecyclerView.Adapter<UxRecyclerViewAdapter.MyViewHolder> {
-    ArrayList<Projects> projects;
+    ArrayList<Project> projects;
     private Context mContext;
 
-    public UxRecyclerViewAdapter(Context context, ArrayList<Projects> projects){
+    public UxRecyclerViewAdapter(Context context, ArrayList<Project> projects){
         this.mContext = context;
         this.projects = projects;
     }
@@ -36,13 +37,13 @@ public class UxRecyclerViewAdapter extends RecyclerView.Adapter<UxRecyclerViewAd
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
-        holder.textView.setText(projects.get(position).getProject_name());
-        Picasso.get().load(projects.get(position).getProject_image()).into(holder.imageView);
+        holder.textView.setText(projects.get(position).getProjectName());
+        Picasso.get().load(projects.get(position).getPictureUri()).into(holder.imageView);
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, UxReportActivity.class);
-                intent.putExtra("project_id", projects.get(position).getProject_id());
+                intent.putExtra("project_id", projects.get(position).getProjectId());
                 mContext.startActivity(intent);
             }
         });
