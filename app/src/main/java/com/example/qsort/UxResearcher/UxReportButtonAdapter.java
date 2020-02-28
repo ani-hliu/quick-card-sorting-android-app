@@ -1,0 +1,61 @@
+package com.example.qsort.UxResearcher;
+
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.qsort.Project;
+import com.example.qsort.R;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+
+public class UxReportButtonAdapter extends RecyclerView.Adapter<UxReportButtonAdapter.MyViewHolder> {
+    ArrayList<String> labelList;
+    private Context mContext;
+
+    public UxReportButtonAdapter(Context context, ArrayList<String> labelList){
+        this.mContext = context;
+        this.labelList = labelList;
+    }
+
+    @NonNull
+    @Override
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.label_button_view,parent,false);
+        MyViewHolder myViewHolder = new MyViewHolder(view);
+        return myViewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
+        holder.labelButton.setText(labelList.get(position));
+ 
+    }
+
+    @Override
+    public int getItemCount() {
+        return labelList.size();
+    }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder{
+
+        Button labelButton;
+
+        public MyViewHolder(@NonNull View itemView) {
+            super(itemView);
+            labelButton = itemView.findViewById(R.id.labelReportButton);
+        }
+    }
+}
