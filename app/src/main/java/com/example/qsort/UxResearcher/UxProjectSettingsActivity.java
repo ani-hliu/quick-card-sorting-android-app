@@ -86,27 +86,24 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
         final String projectTitle = projectTitleTextView.getText().toString();
         timestamp = String.valueOf(Timestamp.now().getSeconds());
 
+        Map<String, Integer> categoriesMap = new HashMap<>();
+        categoriesMap.put("value",0);
+
+        showMessage("Submitting project..");
         for (int i=0; i<labelsArray.length;i++){
-            Map<String, Integer> label = new HashMap<>();
+            Map<String, String> labelsMap = new HashMap<>();
+            labelsMap.put("id",labelsArray[i]);
+            firebaseFirestore.collection("projects").document(uid+"_"+timestamp)
+                    .collection("labels").document(labelsArray[i]).set(labelsMap);
 
             for (int j=0; j<categoriesArray.length;j++){
-                label.put(categoriesArray[j],0);
-            }
-            firebaseFirestore.collection(uid+"_"+timestamp).document(labelsArray[i])
-                    .set(label)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            showMessage("Project successfully created!");
+//                label.put(categoriesArray[j],0);
 
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w("Error writing document", e);
-                        }
-                    });
+                firebaseFirestore.collection("projects").document(uid+"_"+timestamp)
+                        .collection("labels").document(labelsArray[i])
+                        .collection("categories").document(categoriesArray[j]).set(categoriesMap);
+
+            }
         }
 
         if(pictureUri == null){
