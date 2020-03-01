@@ -17,12 +17,14 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Date;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.bumptech.glide.Glide;
 import com.example.qsort.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -30,6 +32,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -45,15 +48,15 @@ public class UxReportActivity extends AppCompatActivity {
     private String userId;
     private String timestamp;
     private RecyclerView labelButtonRecyclerView;
+    private TextView labelLabel, categoryRank;
 
 
 
     RecyclerView.LayoutManager layoutManager;
     UxReportButtonAdapter uxReportButtonAdapter;
 
-
     private String project_id = "";
-
+    String noParticipants;
     Context context;
 
     @Override
@@ -76,45 +79,10 @@ public class UxReportActivity extends AppCompatActivity {
         projectPartiNum = findViewById(R.id.reportPartiNum);
         labelButtonRecyclerView = findViewById(R.id.labelButtonRecyclerView);
 
-        DocumentReference documentReference = db.collection("projects").document(project_id);
-        documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                projectName.setText(documentSnapshot.getData().get("Project Name").toString());
-                projectPartiNum.setText(documentSnapshot.getData().get("Participants").toString());
-                timestamp = documentSnapshot.getData().get("timestamp").toString();
-                SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-                Date date = new Date(Long.parseLong(timestamp));
-                projectTime.setText(sf.format(date));
-                Glide.with(UxReportActivity.this).load(documentSnapshot.getString("Project Picture")).into(projectView);
-            }
-        });
-
-
-        db.collection(project_id).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                if(task.isSuccessful()){
-
-                    ArrayList<String> list = new ArrayList<>();
-                    for(QueryDocumentSnapshot document : task.getResult()){
-                        String labelButtonMap = document.getId();
-                        list.add(labelButtonMap);
-                    }
-
-                    System.out.println(list);
-
-                    labelButtonRecyclerView = findViewById(R.id.labelButtonRecyclerView);
-                    UxReportButtonAdapter myAdapter = new UxReportButtonAdapter(UxReportActivity.this,list);
-                    layoutManager = new GridLayoutManager(UxReportActivity.this, 1);
-                    labelButtonRecyclerView.setLayoutManager(layoutManager);
-                    labelButtonRecyclerView.setAdapter(myAdapter);
-                }
-
-            }
-        });
-
+        labelLabel = findViewById(R.id.labelLabelReport);
+        categoryRank = findViewById(R.id.categoriesRank);
+        displayProjectsInfo();
+        displayProjectLabelButton();
 
 
 
@@ -125,8 +93,93 @@ public class UxReportActivity extends AppCompatActivity {
         finish();
     }
 
-    public void displayProjects(){
+    public void displayProjectsInfo(){
+
+        DocumentReference documentReference = db.collection("projects").document(project_id);
+        documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+
+                noParticipants = documentSnapshot.getData().get("Participants").toString();
+                projectName.setText(documentSnapshot.getData().get("Project Name").toString());
+                projectPartiNum.setText(documentSnapshot.getData().get("Participants").toString());
+
+                timestamp = documentSnapshot.getData().get("timestamp").toString();
+
+                Long timestampLong = Long.parseLong(String.valueOf(timestamp));
+                if (timestampLong < 10000000000L) {
+                    timestampLong = timestampLong * 1000;
+                }
+
+                SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+                Date date = new Date(Long.parseLong(String.valueOf(timestampLong)));
+                String sd = sf.format(new Date(Long.parseLong(String.valueOf(timestampLong))));
+                projectTime.setText(sd);
+
+
+
+                Glide.with(UxReportActivity.this).load(documentSnapshot.getString("Project Picture")).into(projectView);
+            }
+        });
 
     }
+
+    public void displayProjectLabelButton(){
+
+        db.collection("projects").document(project_id)
+                .collection("labels")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                if(task.isSuccessful()){
+                    ArrayList<String> list = new ArrayList<>();
+                    for(QueryDocumentSnapshot document : task.getResult()){
+                        String labelButtonMap = document.getId();
+                        list.add(labelButtonMap);
+                    }
+
+                    System.out.println(list);
+
+                    labelButtonRecyclerView = findViewById(R.id.labelButtonRecyclerView);
+                    UxReportButtonAdapter myAdapter = new UxReportButtonAdapter(UxReportActivity.this,list,project_id);
+                    layoutManager = new GridLayoutManager(UxReportActivity.this, 1);
+                    labelButtonRecyclerView.setLayoutManager(layoutManager);
+                    labelButtonRecyclerView.setAdapter(myAdapter);
+                }
+
+            }
+        });
+
+
+    }
+
+    public void displayRank(View view){
+        Button labelButton = (Button)view;
+        final String labelButtonText = labelButton.getText().toString();
+
+        db.collection("projects").document(project_id)
+                .collection("labels").document(labelButtonText)
+                .collection("categories")
+                .orderBy("value",Query.Direction.DESCENDING)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        StringBuilder categoriesRank = new StringBuilder();
+                        if(task.isSuccessful()){
+                            for (QueryDocumentSnapshot document : task.getResult()){
+                                String value = document.getData().get("value").toString();
+                                categoriesRank.append(document.getId()+": "+value+"/"+noParticipants+"\n");
+                            }
+                            labelLabel.setText(labelButtonText);
+                            categoryRank.setText(categoriesRank);
+
+                        }
+                    }
+                });
+    }
+
+
 
 }
