@@ -1,6 +1,5 @@
 package com.example.qsort.UxResearcher;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,20 +10,19 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.qsort.R;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -41,7 +39,10 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
     ImageView projectPicture;
     String timestamp;
     Uri pictureUri;
+    Button submitButton;
+    ProgressBar progressBar;
     private Boolean FLAG = true;
+
 
     String uid;
     private FirebaseAuth mAuth;
@@ -57,13 +58,15 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ux_project_settings);
-
         categoriesTextView = findViewById(R.id.categoryTextView);
         labelsTextView = findViewById(R.id.labelTextView);
         projectTitleTextView = findViewById(R.id.projectTitleTextView);
         projectPicture = findViewById(R.id.projectPicture);
+        progressBar = findViewById(R.id.progressBarProject);
+        submitButton = findViewById(R.id.submitButton);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
+        progressBar.setVisibility(View.INVISIBLE);
 
         Intent intent = getIntent();
 
@@ -80,11 +83,14 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
 
     public void submitProject(View view){
 
+
         if(FLAG == true){
             Toast.makeText(this, "Please choose a project photo.", Toast.LENGTH_SHORT).show();
             return;
         }
         else{
+
+
             final String categories = categoriesTextView.getText().toString();
             final String labels = labelsTextView.getText().toString();
             final String projectTitle = projectTitleTextView.getText().toString();
@@ -94,9 +100,15 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
                 return;
             }
             else{
+
+                progressBar.setVisibility(View.VISIBLE);
+
                 categoriesTextView.setEnabled(false);
                 labelsTextView.setEnabled(false);
                 projectTitleTextView.setEnabled(false);
+                submitButton.setEnabled(false);
+                projectPicture.setEnabled(false);
+
 
                 String[] categoriesArray = categories.split("\n");
                 String[] labelsArray = labels.split("\n");
@@ -122,28 +134,21 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
                     }
                 }
 
-                if(pictureUri == null){
-                    /**TODO
-                     * User didn't upload any profile picutre
-                     */
-                    storeProject(projectTitle,"");
-                }
-                else{
-                    storageReference = FirebaseStorage.getInstance().getReference().child("project pictures");
-                    final StorageReference imageFilePath = storageReference.child(pictureUri.getLastPathSegment());
+                storageReference = FirebaseStorage.getInstance().getReference().child("project pictures");
+                final StorageReference imageFilePath = storageReference.child(pictureUri.getLastPathSegment());
 
-                    imageFilePath.putFile(pictureUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    storeProject(projectTitle, uri.toString());
-                                }
-                            });
-                        }
-                    });
-                }
+                imageFilePath.putFile(pictureUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                storeProject(projectTitle, uri.toString());
+                            }
+                        });
+                    }
+                });
+
             }
         }
     }
