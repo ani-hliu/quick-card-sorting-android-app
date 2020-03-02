@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.qsort.R;
@@ -40,6 +41,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
     ImageView projectPicture;
     String timestamp;
     Uri pictureUri;
+    ProgressBar progresBar;
 
     String uid;
     private FirebaseAuth mAuth;
@@ -60,8 +62,11 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
         labelsTextView = findViewById(R.id.labelTextView);
         projectTitleTextView = findViewById(R.id.projectTitleTextView);
         projectPicture = findViewById(R.id.projectPicture);
+        progresBar = findViewById(R.id.progressBarProject);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
+
+        progresBar.setVisibility(View.INVISIBLE);
 
         Intent intent = getIntent();
 
@@ -77,6 +82,8 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
     }
 
     public void submitProject(View view){
+
+        progresBar.setVisibility(View.VISIBLE);
 
         final String categories = categoriesTextView.getText().toString();
         final String labels = labelsTextView.getText().toString();
