@@ -70,6 +70,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
         progressBar.setVisibility(View.INVISIBLE);
 
+
         Intent intent = getIntent();
 
         categories = intent.getExtras().getString("Categories");
