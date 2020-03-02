@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -29,7 +30,7 @@ public class UxReportButtonAdapter extends RecyclerView.Adapter<UxReportButtonAd
     ArrayList<String> labelList;
     private Context mContext;
     String project_id;
-    FirebaseFirestore db;
+    int index = -1;
 
     public UxReportButtonAdapter(Context context, ArrayList<String> labelList, String project_id){
         this.mContext = context;
@@ -49,10 +50,33 @@ public class UxReportButtonAdapter extends RecyclerView.Adapter<UxReportButtonAd
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, final int position) {
-
-
         holder.labelButton.setText(labelList.get(position));
+        holder.labelButton.setBackgroundColor(Color.GRAY);
 
+//        holder.labelButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                holder.labelButton.setBackgroundColor(Color.GRAY);
+//                view.setBackgroundColor(Color.GREEN);
+//            }
+//        });
+
+        holder.linearlayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                index = position;
+                notifyDataSetChanged();
+            }
+        });
+        if(index==position){
+//            holder.linearlayout.setBackgroundColor(Color.parseColor("#FFEB3B"));
+            holder.labelButton.setBackgroundColor(Color.parseColor("#ffffff"));
+        }
+        else
+        {
+//            holder.linearlayout.setBackgroundColor(Color.parseColor("#ffffff"));
+            holder.labelButton.setBackgroundColor(Color.GRAY);
+        }
     }
 
     @Override
@@ -63,14 +87,14 @@ public class UxReportButtonAdapter extends RecyclerView.Adapter<UxReportButtonAd
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
         Button labelButton;
+        LinearLayout linearlayout;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             labelButton = itemView.findViewById(R.id.labelReportButton);
-
+            labelButton.setBackgroundColor(Color.GRAY);
+            linearlayout = itemView.findViewById(R.id.linear);
         }
     }
-
-
 
 }

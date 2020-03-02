@@ -106,6 +106,12 @@ public class UxRegisterActivity extends AppCompatActivity implements View.OnClic
             return;
         }
 
+        email.setEnabled(false);
+        password.setEnabled(false);
+        password2.setEnabled(false);
+        username.setEnabled(false);
+        bio.setEnabled(false);
+
         Toast.makeText(UxRegisterActivity.this, "Signing up!",
                 Toast.LENGTH_LONG).show();
 

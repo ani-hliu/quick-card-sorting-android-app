@@ -3,12 +3,15 @@ package com.example.qsort.UxResearcher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -50,10 +53,11 @@ public class UxReportActivity extends AppCompatActivity {
     private RecyclerView labelButtonRecyclerView;
     private TextView labelLabel, categoryRank;
 
-
+    ArrayList<String> list = new ArrayList<>();
 
     RecyclerView.LayoutManager layoutManager;
     UxReportButtonAdapter uxReportButtonAdapter;
+    private Parcelable recyclerViewState;
 
     private String project_id = "";
     String noParticipants;
@@ -83,8 +87,6 @@ public class UxReportActivity extends AppCompatActivity {
         categoryRank = findViewById(R.id.categoriesRank);
         displayProjectsInfo();
         displayProjectLabelButton();
-
-
 
     }
 
@@ -133,7 +135,7 @@ public class UxReportActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
 
                 if(task.isSuccessful()){
-                    ArrayList<String> list = new ArrayList<>();
+
                     for(QueryDocumentSnapshot document : task.getResult()){
                         String labelButtonMap = document.getId();
                         list.add(labelButtonMap);
@@ -155,8 +157,18 @@ public class UxReportActivity extends AppCompatActivity {
     }
 
     public void displayRank(View view){
-        Button labelButton = (Button)view;
+        // Restore state
+        labelButtonRecyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
+
+        UxReportButtonAdapter myAdapter = new UxReportButtonAdapter(UxReportActivity.this,list,project_id);
+        labelButtonRecyclerView.setAdapter(myAdapter);
+
+        view.setBackgroundColor(Color.GREEN);
+
+        final Button labelButton = (Button)view;
         final String labelButtonText = labelButton.getText().toString();
+
+        labelButton.setBackgroundColor(Color.GREEN);
 
         db.collection("projects").document(project_id)
                 .collection("labels").document(labelButtonText)
@@ -178,8 +190,10 @@ public class UxReportActivity extends AppCompatActivity {
                         }
                     }
                 });
-    }
 
+        // store state
+        recyclerViewState = labelButtonRecyclerView.getLayoutManager().onSaveInstanceState();
+    }
 
 
 }
