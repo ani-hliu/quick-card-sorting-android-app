@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -42,6 +43,8 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
     String timestamp;
     Uri pictureUri;
     ProgressBar progresBar;
+    private Boolean FLAG = true;
+
 
     String uid;
     private FirebaseAuth mAuth;
@@ -57,7 +60,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ux_project_settings);
-
+        progresBar.setVisibility(View.INVISIBLE);
         categoriesTextView = findViewById(R.id.categoryTextView);
         labelsTextView = findViewById(R.id.labelTextView);
         projectTitleTextView = findViewById(R.id.projectTitleTextView);
@@ -85,57 +88,72 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
 
         progresBar.setVisibility(View.VISIBLE);
 
-        final String categories = categoriesTextView.getText().toString();
-        final String labels = labelsTextView.getText().toString();
-
-        String[] categoriesArray = categories.split("\n");
-        String[] labelsArray = labels.split("\n");
-        final String projectTitle = projectTitleTextView.getText().toString();
-        timestamp = String.valueOf(Timestamp.now().getSeconds());
-
-        Map<String, Integer> categoriesMap = new HashMap<>();
-        categoriesMap.put("value",0);
-
-        showMessage("Submitting project..");
-        for (int i=0; i<labelsArray.length;i++){
-            Map<String, String> labelsMap = new HashMap<>();
-            labelsMap.put("id",labelsArray[i]);
-            firebaseFirestore.collection("projects").document(uid+"_"+timestamp)
-                    .collection("labels").document(labelsArray[i]).set(labelsMap);
-
-            for (int j=0; j<categoriesArray.length;j++){
-//                label.put(categoriesArray[j],0);
-
-                firebaseFirestore.collection("projects").document(uid+"_"+timestamp)
-                        .collection("labels").document(labelsArray[i])
-                        .collection("categories").document(categoriesArray[j]).set(categoriesMap);
-
-            }
-        }
-
-        if(pictureUri == null){
-            /**TODO
-             * User didn't upload any profile picutre
-             */
-            storeProject(projectTitle,"");
+        if(FLAG == true){
+            Toast.makeText(this, "Please choose a project photo.", Toast.LENGTH_SHORT).show();
+            return;
         }
         else{
-            storageReference = FirebaseStorage.getInstance().getReference().child("project pictures");
-            final StorageReference imageFilePath = storageReference.child(pictureUri.getLastPathSegment());
+            final String categories = categoriesTextView.getText().toString();
+            final String labels = labelsTextView.getText().toString();
+            final String projectTitle = projectTitleTextView.getText().toString();
 
-            imageFilePath.putFile(pictureUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            if(TextUtils.isEmpty(categories) | TextUtils.isEmpty(labels) | TextUtils.isEmpty(projectTitle)){
+                Toast.makeText(this, "Please fill all the blanks.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            else{
+                categoriesTextView.setEnabled(false);
+                labelsTextView.setEnabled(false);
+                projectTitleTextView.setEnabled(false);
+
+                String[] categoriesArray = categories.split("\n");
+                String[] labelsArray = labels.split("\n");
+                timestamp = String.valueOf(Timestamp.now().getSeconds());
+
+                Map<String, Integer> categoriesMap = new HashMap<>();
+                categoriesMap.put("value",0);
+
+                showMessage("Submitting project..");
+                for (int i=0; i<labelsArray.length;i++){
+                    Map<String, String> labelsMap = new HashMap<>();
+                    labelsMap.put("id",labelsArray[i]);
+                    firebaseFirestore.collection("projects").document(uid+"_"+timestamp)
+                            .collection("labels").document(labelsArray[i]).set(labelsMap);
+
+                    for (int j=0; j<categoriesArray.length;j++){
+//                label.put(categoriesArray[j],0);
+
+                        firebaseFirestore.collection("projects").document(uid+"_"+timestamp)
+                                .collection("labels").document(labelsArray[i])
+                                .collection("categories").document(categoriesArray[j]).set(categoriesMap);
+
+                    }
+                }
+
+                if(pictureUri == null){
+                    /**TODO
+                     * User didn't upload any profile picutre
+                     */
+                    storeProject(projectTitle,"");
+                }
+                else{
+                    storageReference = FirebaseStorage.getInstance().getReference().child("project pictures");
+                    final StorageReference imageFilePath = storageReference.child(pictureUri.getLastPathSegment());
+
+                    imageFilePath.putFile(pictureUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
-                        public void onSuccess(Uri uri) {
-                            storeProject(projectTitle, uri.toString());
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    storeProject(projectTitle, uri.toString());
+                                }
+                            });
                         }
                     });
                 }
-            });
+            }
         }
-
     }
 
     public void addPicture(View view){
@@ -186,6 +204,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
             pictureUri = data.getData();
             projectPicture.setImageURI(pictureUri);
 
+            FLAG = false;
         }
 
         if (resultCode == RESULT_OK && requestCode == CAMERA_CODE && data != null) {
@@ -200,6 +219,8 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
                 pictureUri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null, null));
                 //ImgUserPhoto.setImageBitmap(bitmap);
                 projectPicture.setImageURI(pictureUri);
+
+                FLAG = false;
             }
 
         }

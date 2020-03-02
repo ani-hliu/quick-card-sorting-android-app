@@ -111,15 +111,25 @@ tools:context=".UxResearcher.UxReportActivity">
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_centerInParent="true">
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/reportLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:text="Labels"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="20sp"/>
 
         <TextView
             android:id="@+id/reportResult"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Result: "
+            android:layout_marginLeft="90dp"
+            android:text="Card sorting results: "
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textSize="20sp"/>
 
@@ -150,7 +160,7 @@ tools:context=".UxResearcher.UxReportActivity">
                 android:id="@+id/categoriesRank"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="18dp"
                 android:text="Click label to find out the results" />
         </LinearLayout>
 

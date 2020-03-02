@@ -101,7 +101,7 @@ public class UxMainActivity<map> extends AppCompatActivity {
         layoutManager = new GridLayoutManager(this, 3);
         recyclerView.setLayoutManager(layoutManager);
 
-        Toast.makeText(UxMainActivity.this, "Loading images",
+        Toast.makeText(UxMainActivity.this, "Loading projects",
                 Toast.LENGTH_LONG).show();
 
         reloadProjects();
