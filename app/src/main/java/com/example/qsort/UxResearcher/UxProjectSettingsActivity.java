@@ -1,5 +1,6 @@
 package com.example.qsort.UxResearcher;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.qsort.R;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 
@@ -118,20 +120,34 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
                 categoriesMap.put("value",0);
 
                 showMessage("Submitting project..");
-                for (int i=0; i<labelsArray.length;i++){
-                    Map<String, String> labelsMap = new HashMap<>();
-                    labelsMap.put("id",labelsArray[i]);
-                    firebaseFirestore.collection("projects").document(uid+"_"+timestamp)
-                            .collection("labels").document(labelsArray[i]).set(labelsMap);
+                for (int i=0; i<labelsArray.length ;i++){
 
-                    for (int j=0; j<categoriesArray.length;j++){
-//                label.put(categoriesArray[j],0);
-
-                        firebaseFirestore.collection("projects").document(uid+"_"+timestamp)
-                                .collection("labels").document(labelsArray[i])
-                                .collection("categories").document(categoriesArray[j]).set(categoriesMap);
+                    if(labelsArray[i].equals("")){
 
                     }
+                    else{
+                        Map<String, String> labelsMap = new HashMap<>();
+                        labelsMap.put("id",labelsArray[i]);
+                        firebaseFirestore.collection("projects").document(uid+"_"+timestamp)
+                                .collection("labels").document(labelsArray[i]).set(labelsMap);
+
+
+                        for (int j=0; j<categoriesArray.length;j++) {
+                            if(categoriesArray[j].equals("")){
+
+                            }
+                            else{
+                                firebaseFirestore.collection("projects").document(uid + "_" + timestamp)
+                                        .collection("labels").document(labelsArray[i])
+                                        .collection("categories").document(categoriesArray[j]).set(categoriesMap);
+                            }
+
+                        }
+
+                    }
+
+
+
                 }
 
                 storageReference = FirebaseStorage.getInstance().getReference().child("project pictures");
@@ -145,7 +161,27 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
                             public void onSuccess(Uri uri) {
                                 storeProject(projectTitle, uri.toString());
                             }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                showMessage(e.toString());
+                                categoriesTextView.setEnabled(true);
+                                labelsTextView.setEnabled(true);
+                                projectTitleTextView.setEnabled(true);
+                                submitButton.setEnabled(true);
+                                projectPicture.setEnabled(true);
+                            }
                         });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showMessage(e.toString());
+                        categoriesTextView.setEnabled(true);
+                        labelsTextView.setEnabled(true);
+                        projectTitleTextView.setEnabled(true);
+                        submitButton.setEnabled(true);
+                        projectPicture.setEnabled(true);
                     }
                 });
 
@@ -258,8 +294,10 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
 
     }
 
-
-
+    public void backToMain(View view){
+        startActivity(new Intent(getApplicationContext(),UxMainActivity.class));
+        finish();
+    }
 
 
 }

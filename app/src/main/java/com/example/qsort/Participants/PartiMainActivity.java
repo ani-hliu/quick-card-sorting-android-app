@@ -30,14 +30,16 @@ public class PartiMainActivity extends AppCompatActivity {
         categories = intent.getExtras().getString("Categories");
         labels = intent.getExtras().getString("Labels");
 
-        labelTextView.setText(labels);
+        labelTextView.setText("Categories:\n"+
+                categories+"\n\nLabels:\n"+labels);
 
     }
 
-    public void backToWelcome(View view){
-        startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
+    public void backToEnterCode(View view){
+        startActivity(new Intent(getApplicationContext(), PartiWelcomeActivity.class));
         finish();
     }
+
 
 
 }

@@ -26,5 +26,5 @@
         android:text="@string/back"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:onClick="backToWelcome"/>
+        android:onClick="backToEnterCode"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -44,5 +44,15 @@
         app:layout_constraintTop_toBottomOf="@+id/enterCodeEditText"
         android:onClick="enterProject"
         android:textAllCaps="false"/>
+    <Button
+        android:id="@+id/backButtonPartiMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="54dp"
+        android:text="@string/back"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:onClick="backToWelcome"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
