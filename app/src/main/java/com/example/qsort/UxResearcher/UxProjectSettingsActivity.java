@@ -245,6 +245,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
                         Intent intent = new Intent(getApplicationContext(),UxShareActivity.class);
 
                         intent.putExtra("Project ID",uid+"_"+timestamp);
+                        intent.putExtra("timestamp",timestamp);
                         // start the activity
                         startActivity(intent);
                     }

@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.qsort.R;
+import com.example.qsort.WelcomeActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -94,5 +95,10 @@ public class UxLoginActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    public void backToWelcome(View view){
+        startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
+        finish();
     }
 }

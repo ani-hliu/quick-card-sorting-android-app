@@ -52,6 +52,8 @@ public class UxReportActivity extends AppCompatActivity {
     private String timestamp;
     private RecyclerView labelButtonRecyclerView;
     private TextView labelLabel, categoryRank;
+    private TextView reportUniqueCode;
+    private Button labelButton;
 
     ArrayList<String> list = new ArrayList<>();
 
@@ -82,8 +84,10 @@ public class UxReportActivity extends AppCompatActivity {
         projectTime = findViewById(R.id.reportProjectTime);
         projectPartiNum = findViewById(R.id.reportPartiNum);
         labelButtonRecyclerView = findViewById(R.id.labelButtonRecyclerView);
+        reportUniqueCode = findViewById(R.id.reportUniqueCode);
+        labelButton = findViewById(R.id.labelReportButton);
 
-        labelLabel = findViewById(R.id.labelLabelReport);
+        labelLabel = findViewById(R.id.reportResult);
         categoryRank = findViewById(R.id.categoriesRank);
         displayProjectsInfo();
         displayProjectLabelButton();
@@ -97,7 +101,7 @@ public class UxReportActivity extends AppCompatActivity {
 
     public void displayProjectsInfo(){
 
-        DocumentReference documentReference = db.collection("projects").document(project_id);
+        final DocumentReference documentReference = db.collection("projects").document(project_id);
         documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
@@ -105,6 +109,7 @@ public class UxReportActivity extends AppCompatActivity {
                 noParticipants = documentSnapshot.getData().get("Participants").toString();
                 projectName.setText(documentSnapshot.getData().get("Project Name").toString());
                 projectPartiNum.setText(documentSnapshot.getData().get("Participants").toString());
+                reportUniqueCode.setText(documentSnapshot.getData().get("Project ID").toString());
 
                 timestamp = documentSnapshot.getData().get("timestamp").toString();
 
@@ -158,17 +163,17 @@ public class UxReportActivity extends AppCompatActivity {
 
     public void displayRank(View view){
         // Restore state
-        labelButtonRecyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
+//        labelButtonRecyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
+//
+//        UxReportButtonAdapter myAdapter = new UxReportButtonAdapter(UxReportActivity.this,list,project_id);
+//        labelButtonRecyclerView.setAdapter(myAdapter);
 
-        UxReportButtonAdapter myAdapter = new UxReportButtonAdapter(UxReportActivity.this,list,project_id);
-        labelButtonRecyclerView.setAdapter(myAdapter);
-
-        view.setBackgroundColor(Color.GREEN);
+//        labelButton.setBackgroundColor(Color.RED);
 
         final Button labelButton = (Button)view;
         final String labelButtonText = labelButton.getText().toString();
-
-        labelButton.setBackgroundColor(Color.GREEN);
+//
+//        labelButton.setBackgroundColor(Color.GREEN);
 
         db.collection("projects").document(project_id)
                 .collection("labels").document(labelButtonText)
@@ -182,7 +187,7 @@ public class UxReportActivity extends AppCompatActivity {
                         if(task.isSuccessful()){
                             for (QueryDocumentSnapshot document : task.getResult()){
                                 String value = document.getData().get("value").toString();
-                                categoriesRank.append(document.getId()+": "+value+"/"+noParticipants+"\n");
+                                categoriesRank.append(document.getId()+": "+value+"/"+noParticipants+"\n\n");
                             }
                             labelLabel.setText(labelButtonText);
                             categoryRank.setText(categoriesRank);
@@ -192,7 +197,16 @@ public class UxReportActivity extends AppCompatActivity {
                 });
 
         // store state
-        recyclerViewState = labelButtonRecyclerView.getLayoutManager().onSaveInstanceState();
+//        recyclerViewState = labelButtonRecyclerView.getLayoutManager().onSaveInstanceState();
+    }
+
+    public void shareCode(View view){
+
+        Intent intent = new Intent(getApplicationContext(),UxShareActivity.class);
+
+        intent.putExtra("Project ID",userId+"_"+timestamp);
+        // start the activity
+        startActivity(intent);
     }
 
 

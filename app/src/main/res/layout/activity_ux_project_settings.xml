@@ -72,7 +72,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/labelTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/labelTextView"
+        android:textAllCaps="false"/>
 
     <EditText
         android:id="@+id/projectTitleTextView"
@@ -133,6 +134,7 @@
         app:layout_constraintEnd_toStartOf="@+id/categoryTextView"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/categoryTextView"
-        app:layout_constraintTop_toBottomOf="@+id/submitButton" />
+        app:layout_constraintTop_toBottomOf="@+id/submitButton"
+        android:textAllCaps="false"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

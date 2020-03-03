@@ -50,7 +50,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/uniqueCodeTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/uniqueCodeTextView"
+        android:textAllCaps="false"/>
 
     <Button
         android:id="@+id/emailButton"
@@ -62,7 +63,8 @@
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/emailTextView"
-        android:onClick="shareEmail"/>
+        android:onClick="shareEmail"
+        android:textAllCaps="false"/>
 
     <EditText
         android:id="@+id/emailTextView"
@@ -87,5 +89,6 @@
         android:text="@string/back"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:onClick="backToMain"/>
+        android:onClick="backToMain"
+        android:textAllCaps="false"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
