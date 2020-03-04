@@ -52,7 +52,6 @@ public class PartiWelcomeActivity extends AppCompatActivity {
             showMessage("Please enter your unique code");
             return;
         }
-        System.out.println(projectID);
         firebaseFirestore.collection("projects").document(projectID).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -63,7 +62,6 @@ public class PartiWelcomeActivity extends AppCompatActivity {
                                 categories = documentSnapshot.getData().get("Categories").toString();
                                 labels = documentSnapshot.getData().get("Labels").toString();
 
-                                System.out.println(categories);
 
                                 Intent intent = new Intent(getApplicationContext(), PartiMainActivity.class);
 

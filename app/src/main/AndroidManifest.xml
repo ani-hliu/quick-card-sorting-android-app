@@ -19,19 +19,22 @@
         <activity android:name=".UxResearcher.UxReportActivity" />
         <activity android:name=".Participants.PartiReviewActivity" />
         <activity android:name=".Participants.PartiSortActivity" />
-        <activity android:name=".Participants.PartiWelcomeActivity" />
+        <activity android:name=".Participants.PartiWelcomeActivity" >
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
         <activity android:name=".UxResearcher.UxShareActivity" />
         <activity android:name=".UxResearcher.UxProjectSettingsActivity" />
-        <activity android:name=".Participants.PartiMainActivity" />
+        <activity android:name=".Participants.PartiMainActivity" >
+        </activity>
         <activity android:name=".UxResearcher.UxMainActivity" />
         <activity android:name=".UxResearcher.UxLoginActivity" />
         <activity android:name=".UxResearcher.UxRegisterActivity" />
         <activity android:name=".WelcomeActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".Participants.PartiMainActivity">
 
-
     <androidx.viewpager.widget.ViewPager
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/pager"
@@ -16,19 +15,15 @@
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:tabMode="scrollable"
+            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@color/colorAccent"
+            app:tabSelectedTextColor="@color/colorBlack"
+            app:tabPaddingStart="0dp"
+            />
 
     </androidx.viewpager.widget.ViewPager>
 
-
-    <Button
-        android:id="@+id/backButtonPartiMain"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="54dp"
-        android:onClick="backToEnterCode"
-        android:text="@string/back"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
