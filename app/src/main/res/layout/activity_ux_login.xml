@@ -85,13 +85,13 @@
 
     <ProgressBar
         android:id="@+id/loading"
-        android:layout_width="0dp"
-        android:layout_height="12dp"
+        android:layout_width="93dp"
+        android:layout_height="67dp"
         android:layout_gravity="center"
         android:layout_marginTop="20dp"
-        android:visibility="gone"
+        android:gravity="center"
         android:textAllCaps="false"
-        android:gravity="center"/>
+        android:visibility="gone" />
 
 
 </LinearLayout>
