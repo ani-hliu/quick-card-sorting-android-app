@@ -35,7 +35,6 @@ public class PartiMainActivity extends AppCompatActivity {
 
         submitSortButton = findViewById(R.id.submitSortButton);
 
-
         Intent intent = getIntent();
 
         categories = intent.getExtras().getString("Categories");
