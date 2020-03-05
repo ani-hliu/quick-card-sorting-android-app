@@ -68,4 +68,5 @@ dependencies {
     implementation 'androidx.viewpager2:viewpager2:1.0.0-beta04'
     implementation 'androidx.fragment:fragment-ktx:1.2.0-alpha04'
     implementation 'com.google.android.material:material:1.1.0-alpha10'
+    implementation 'q.rorbin:VerticalTabLayout:1.2.5'
 }

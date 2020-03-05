@@ -58,9 +58,6 @@ public class UxReportActivity extends AppCompatActivity {
     ArrayList<String> list = new ArrayList<>();
 
     RecyclerView.LayoutManager layoutManager;
-    UxReportButtonAdapter uxReportButtonAdapter;
-    private Parcelable recyclerViewState;
-
     private String project_id = "";
     String noParticipants;
     Context context;
@@ -145,8 +142,6 @@ public class UxReportActivity extends AppCompatActivity {
                         String labelButtonMap = document.getId();
                         list.add(labelButtonMap);
                     }
-
-                    System.out.println(list);
 
                     labelButtonRecyclerView = findViewById(R.id.labelButtonRecyclerView);
                     UxReportButtonAdapter myAdapter = new UxReportButtonAdapter(UxReportActivity.this,list,project_id);

@@ -1,78 +1,100 @@
 package com.example.qsort.Participants;
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.qsort.R;
+import com.example.qsort.UxResearcher.UxReportActivity;
+import com.example.qsort.UxResearcher.UxReportButtonAdapter;
+import com.example.qsort.UxResearcher.UxShareActivity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class PartiMainActivity extends FragmentActivity {
+public class PartiMainActivity extends AppCompatActivity {
 
-    TextView labelTextView;
-    String categories, labels;
-    ViewPager viewPager;
-    PagerAdapter pagerAdapter;
-    String[] labelList;
+    RecyclerView sortRecyclerView;
+    RecyclerView.LayoutManager layoutManager;
+
+    String categories, labels, project_id;
+    String[] labelsArray,categoriesArray;
+    Button submitSortButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parti_main);
 
+        submitSortButton = findViewById(R.id.submitSortButton);
+
+
         Intent intent = getIntent();
 
         categories = intent.getExtras().getString("Categories");
         labels = intent.getExtras().getString("Labels");
-        labelList = labels.split("\n");
-        System.out.println(labels);
+        project_id = intent.getExtras().getString("project_id");
 
-        viewPager = (ViewPager) findViewById(R.id.pager);
-        pagerAdapter = new PagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(pagerAdapter);
-
+        createRecyclerView();
 
     }
 
-    public void backToEnterCode(View view){
-        startActivity(new Intent(getApplicationContext(), PartiWelcomeActivity.class));
-        finish();
+    public void createRecyclerView(){
+        labelsArray = labels.split("\n");
+        categoriesArray = categories.split("\n");
+        List<String> list = new ArrayList<>(Collections.nCopies(labelsArray.length, ""));
+
+
+        String[] newArray = new String[categoriesArray.length+1];
+        newArray[0]="";
+        for(int i=1; i<newArray.length;i++){
+            newArray[i]=categoriesArray[i-1];
+        }
+
+
+        sortRecyclerView = findViewById(R.id.sortRecyclerView);
+        final SortAdapter myAdapter = new SortAdapter(PartiMainActivity.this,labelsArray,newArray,list);
+        layoutManager = new GridLayoutManager(PartiMainActivity.this, 1);
+        sortRecyclerView.setLayoutManager(layoutManager);
+        sortRecyclerView.setAdapter(myAdapter);submitSortButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(myAdapter.list.contains("")){
+                    Toast.makeText(getApplicationContext(),"Please make all selections",Toast.LENGTH_SHORT).show();
+                }
+                else{
+
+                    Intent intent = new Intent(getApplicationContext(), PartiReviewActivity.class);
+
+                    intent.putExtra("Result",transferToString(myAdapter.list));
+                    intent.putExtra("Labels",labels);
+                    intent.putExtra("Categories", categories);
+                    intent.putExtra("project_id",project_id);
+
+                    startActivity(intent);
+                }
+
+            }
+        });
     }
 
-    public class PagerAdapter extends FragmentStatePagerAdapter {
-        public PagerAdapter(FragmentManager fm) {
-            super(fm);
+    public String transferToString(List<String> list){
+        String listString = "";
+
+        for (String s : list)
+        {
+            listString += s + ",";
         }
 
-        @Override
-        public Fragment getItem(int i) {
-            Fragment fragment = new ObjectFragment();
-            Bundle args = new Bundle();
-            // Our object is just an integer :-P
-            args.putString(ObjectFragment.CATEGORY_KEY,categories);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public int getCount() {
-            return labelList.length;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return labelList[position];
-        }
+        return listString;
     }
-
 
 }
-

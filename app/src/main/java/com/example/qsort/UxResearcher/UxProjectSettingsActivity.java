@@ -44,6 +44,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
     Uri pictureUri;
     ProgressBar progresBar;
     private Boolean FLAG = true;
+    String categoriesFinal,labelsFinal,projectTitleFinal;
 
 
     String uid;
@@ -60,7 +61,6 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ux_project_settings);
-        progresBar.setVisibility(View.INVISIBLE);
         categoriesTextView = findViewById(R.id.categoryTextView);
         labelsTextView = findViewById(R.id.labelTextView);
         projectTitleTextView = findViewById(R.id.projectTitleTextView);
@@ -93,9 +93,9 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
             return;
         }
         else{
-            final String categories = categoriesTextView.getText().toString();
-            final String labels = labelsTextView.getText().toString();
-            final String projectTitle = projectTitleTextView.getText().toString();
+             final String categories = categoriesTextView.getText().toString();
+             final String labels = labelsTextView.getText().toString();
+             final String projectTitle = projectTitleTextView.getText().toString();
 
             if(TextUtils.isEmpty(categories) | TextUtils.isEmpty(labels) | TextUtils.isEmpty(projectTitle)){
                 Toast.makeText(this, "Please fill all the blanks.", Toast.LENGTH_SHORT).show();
@@ -131,10 +131,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
                 }
 
                 if(pictureUri == null){
-                    /**TODO
-                     * User didn't upload any profile picutre
-                     */
-                    storeProject(projectTitle,"");
+                    storeProject(projectTitle,"", labels,categories);
                 }
                 else{
                     storageReference = FirebaseStorage.getInstance().getReference().child("project pictures");
@@ -146,7 +143,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
                             imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
-                                    storeProject(projectTitle, uri.toString());
+                                    storeProject(projectTitle, uri.toString(), labels,categories);
                                 }
                             });
                         }
@@ -227,7 +224,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
     }
 
 
-    public void storeProject(String projectTitle, String uri){
+    public void storeProject(String projectTitle, String uri, String labels, String categories){
         Map project = new HashMap<>();
         project.put("Project Name",projectTitle);
         project.put("Project ID",uid+"_"+timestamp);
@@ -235,8 +232,8 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
         project.put("Designer",uid);
         project.put("timestamp",timestamp);
         project.put("Project Picture",uri);
-        project.put("Labels",categories);
-        project.put("Categories",labels);
+        project.put("Labels",labels);
+        project.put("Categories",categories);
 
 
 
@@ -259,9 +256,5 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(),message,Toast.LENGTH_LONG).show();
 
     }
-
-
-
-
 
 }
