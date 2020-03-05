@@ -62,5 +62,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics:17.2.2'
     implementation 'com.google.firebase:firebase-firestore:21.4.0'
     implementation 'de.hdodenhof:circleimageview:3.0.2'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'com.google.android.material:material:1.0.0'
 
+    implementation 'androidx.viewpager2:viewpager2:1.0.0-beta04'
+    implementation 'androidx.fragment:fragment-ktx:1.2.0-alpha04'
+    implementation 'com.google.android.material:material:1.1.0-alpha10'
+    implementation 'q.rorbin:VerticalTabLayout:1.2.5'
 }
