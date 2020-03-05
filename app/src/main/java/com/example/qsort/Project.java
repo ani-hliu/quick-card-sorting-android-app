@@ -20,6 +20,12 @@ public class Project {
 
     }
 
+    public Project(String projectName, String pictureUri, String projectId){
+        this.projectName = projectName;
+        this.pictureUri = pictureUri;
+        this.projectId = projectId;
+    }
+
     public String getProjectName() {
         return projectName;
     }

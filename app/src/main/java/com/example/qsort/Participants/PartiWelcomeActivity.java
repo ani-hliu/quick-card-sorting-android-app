@@ -9,9 +9,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.qsort.R;
 import com.example.qsort.UxResearcher.UxProjectSettingsActivity;
+import com.example.qsort.WelcomeActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -46,33 +48,50 @@ public class PartiWelcomeActivity extends AppCompatActivity {
     public void enterProject(View view){
 
         projectID = enterCodeEditText.getText().toString();
+        if(projectID.equals("")){
+            showMessage("Please enter your unique code");
+            return;
+        }
         System.out.println(projectID);
-
         firebaseFirestore.collection("projects").document(projectID).get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful()){
+                            DocumentSnapshot documentSnapshot = task.getResult();
+                            if(documentSnapshot.exists()){
+                                categories = documentSnapshot.getData().get("Categories").toString();
+                                labels = documentSnapshot.getData().get("Labels").toString();
 
-                        categories = documentSnapshot.getData().get("Categories").toString();
-                        labels = documentSnapshot.getData().get("Labels").toString();
+                                System.out.println(categories);
 
-                        System.out.println(categories);
+                                Intent intent = new Intent(getApplicationContext(), PartiMainActivity.class);
 
-                        Intent intent = new Intent(getApplicationContext(), PartiMainActivity.class);
+                                intent.putExtra("Categories",categories);
+                                intent.putExtra("Labels",labels);
 
-                        intent.putExtra("Categories",categories);
-                        intent.putExtra("Labels",labels);
-
-                        startActivity(intent);
-
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        System.out.println(e);
+                                startActivity(intent);
+                            }
+                            else{
+                                showMessage("Project does not exists!");
+                                enterCodeEditText.setText("");
+                            }
+                        }
+                        else{
+                            showMessage("Project does not exists!");
+                            enterCodeEditText.setText("");
+                        }
                     }
                 });
+    }
+    public void backToWelcome(View view){
+        startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
+        finish();
+    }
+
+    private void showMessage(String message) {
+
+        Toast.makeText(getApplicationContext(),message,Toast.LENGTH_LONG).show();
 
     }
 }

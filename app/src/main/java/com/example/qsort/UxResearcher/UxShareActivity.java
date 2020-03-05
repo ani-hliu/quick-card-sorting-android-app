@@ -16,7 +16,7 @@ public class UxShareActivity extends AppCompatActivity {
     TextView uniqueCodeTextView;
     EditText emailTextView;
     Button QRcodeButton, emailButton;
-    String projectID;
+    String projectID, timestamp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +42,7 @@ public class UxShareActivity extends AppCompatActivity {
         String[] email = emailList.split(",");
 
         String subject = "Your Qsort Invitation";
-        String message = "Hello,\nYour unique code is "+projectID+"\nHave a nice day!";
+        String message = "Hello participant,\nYour unique code is "+projectID+"\nHave a nice day!";
 
         Intent intent  = new Intent(Intent.ACTION_SEND);
         intent.putExtra(intent.EXTRA_EMAIL,email);
@@ -55,8 +55,9 @@ public class UxShareActivity extends AppCompatActivity {
     }
 
     public void backToMain(View view){
-        startActivity(new Intent(getApplicationContext(),UxMainActivity.class));
-        finish();
+        Intent intent = new Intent(getApplicationContext(), UxReportActivity.class);
+        intent.putExtra("project_id",projectID);
+        startActivity(intent);
     }
 
 

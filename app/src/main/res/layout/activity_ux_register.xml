@@ -7,6 +7,15 @@
     android:orientation="vertical"
     android:gravity="center">
 
+    <Button
+        android:id="@+id/backButtonRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/back"
+        android:layout_marginBottom="40dp"
+        android:layout_marginLeft="100dp"
+        android:onClick="backToLogin"/>
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
@@ -77,6 +86,15 @@
         android:layout_marginTop="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sign up" />
+        android:text="Sign up"
+        android:textAllCaps="false"/>
+
+    <ProgressBar
+        android:layout_marginTop="10dp"
+        android:id="@+id/progressBarRegister"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"/>
 
 </LinearLayout>

@@ -10,12 +10,13 @@ tools:context=".UxResearcher.UxReportActivity">
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
+    android:layout_marginTop="20dp"
     android:layout_marginLeft="20dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
         android:orientation="horizontal">
 
         <!--            <ImageView-->
@@ -32,19 +33,47 @@ tools:context=".UxResearcher.UxReportActivity">
             tools:srcCompat="@mipmap/ic_launcher_round"/>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="180dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="10dp">
+            android:layout_marginLeft="10dp"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/reportProjectName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="5dp"
                 android:text="Project Name"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textSize="24sp"/>
+                android:textSize="24sp" />
+
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_centerInParent="true">
+
+                <TextView
+                    android:id="@+id/reportPart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Participants: "
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textSize="20sp"/>
+
+                <TextView
+                    android:id="@+id/reportPartiNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="0"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textSize="20sp"/>
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/reportProjectTime"
@@ -53,8 +82,32 @@ tools:context=".UxResearcher.UxReportActivity">
                 android:layout_marginTop="5dp"
                 android:text="project set up time"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/backButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="backToMain"
+                android:text="@string/back"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/shareButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:onClick="shareCode"
+                android:text="Share"
+                android:textAllCaps="false" />
         </LinearLayout>
 
     </LinearLayout>
@@ -67,31 +120,19 @@ tools:context=".UxResearcher.UxReportActivity">
     android:orientation="vertical"
     android:layout_centerHorizontal="true">
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/reportUniqueCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_centerInParent="true">
+        android:layout_marginTop="5dp"
+        android:text="project set up code"
+        android:textColor="@color/colorAccent"
+        android:textSize="20sp"
+        android:layout_centerInParent="true"
+        android:textIsSelectable="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"/>
 
-        <TextView
-            android:id="@+id/reportPart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="Number of participants: "
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="20sp"/>
-
-        <TextView
-            android:id="@+id/reportPartiNum"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="0"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="20sp"/>
-
-    </LinearLayout>
 
 </RelativeLayout>
 
@@ -103,33 +144,62 @@ tools:context=".UxResearcher.UxReportActivity">
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_centerInParent="true">
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/reportLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="30dp"
+            android:text="Labels"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textSize="24sp"/>
 
         <TextView
             android:id="@+id/reportResult"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Result: "
+            android:layout_marginLeft="50dp"
+            android:text="Card sorting results"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="20sp"/>
+            android:textSize="24sp"/>
 
     </LinearLayout>
 
 </RelativeLayout>
 
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <androidx.recyclerview.widget.RecyclerView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/reportRecyclerView"
-        android:scrollbars="vertical"/>
+        android:orientation="vertical"
+        android:layout_marginTop="10dp">
 
-</RelativeLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@+id/labelButtonRecyclerView"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/categoriesRank"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Click label to find out the results"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/labelButtonRecyclerView"
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical" />
+
+    </RelativeLayout>
+
 
 </LinearLayout>

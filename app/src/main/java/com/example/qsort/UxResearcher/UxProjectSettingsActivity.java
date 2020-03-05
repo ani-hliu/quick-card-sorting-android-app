@@ -10,10 +10,12 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.qsort.R;
@@ -23,7 +25,6 @@ import com.google.firebase.Timestamp;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -40,6 +41,10 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
     ImageView projectPicture;
     String timestamp;
     Uri pictureUri;
+    Button submitButton;
+    ProgressBar progressBar;
+    private Boolean FLAG = true;
+
 
     String uid;
     private FirebaseAuth mAuth;
@@ -55,13 +60,15 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ux_project_settings);
-
         categoriesTextView = findViewById(R.id.categoryTextView);
         labelsTextView = findViewById(R.id.labelTextView);
         projectTitleTextView = findViewById(R.id.projectTitleTextView);
         projectPicture = findViewById(R.id.projectPicture);
+        progressBar = findViewById(R.id.progressBarProject);
+        submitButton = findViewById(R.id.submitButton);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
+        progressBar.setVisibility(View.INVISIBLE);
 
         Intent intent = getIntent();
 
@@ -78,60 +85,108 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
 
     public void submitProject(View view){
 
-        final String categories = categoriesTextView.getText().toString();
-        final String labels = labelsTextView.getText().toString();
 
-        String[] categoriesArray = categories.split("\n");
-        String[] labelsArray = labels.split("\n");
-        final String projectTitle = projectTitleTextView.getText().toString();
-        timestamp = String.valueOf(Timestamp.now().getSeconds());
-
-        for (int i=0; i<labelsArray.length;i++){
-            Map<String, Integer> label = new HashMap<>();
-
-            for (int j=0; j<categoriesArray.length;j++){
-                label.put(categoriesArray[j],0);
-            }
-            firebaseFirestore.collection(timestamp).document(labelsArray[i])
-                    .set(label)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            showMessage("Project successfully created!");
-
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w("Error writing document", e);
-                        }
-                    });
-        }
-
-        if(pictureUri == null){
-            /**TODO
-             * User didn't upload any profile picutre
-             */
-            storeProject(projectTitle,"");
+        if(FLAG == true){
+            Toast.makeText(this, "Please choose a project photo.", Toast.LENGTH_SHORT).show();
+            return;
         }
         else{
-            storageReference = FirebaseStorage.getInstance().getReference().child("project pictures");
-            final StorageReference imageFilePath = storageReference.child(pictureUri.getLastPathSegment());
 
-            imageFilePath.putFile(pictureUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            storeProject(projectTitle, uri.toString());
+
+            final String categories = categoriesTextView.getText().toString();
+            final String labels = labelsTextView.getText().toString();
+            final String projectTitle = projectTitleTextView.getText().toString();
+
+            if(TextUtils.isEmpty(categories) | TextUtils.isEmpty(labels) | TextUtils.isEmpty(projectTitle)){
+                Toast.makeText(this, "Please fill all the blanks.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            else{
+
+                progressBar.setVisibility(View.VISIBLE);
+
+                categoriesTextView.setEnabled(false);
+                labelsTextView.setEnabled(false);
+                projectTitleTextView.setEnabled(false);
+                submitButton.setEnabled(false);
+                projectPicture.setEnabled(false);
+
+
+                String[] categoriesArray = categories.split("\n");
+                String[] labelsArray = labels.split("\n");
+                timestamp = String.valueOf(Timestamp.now().getSeconds());
+
+                Map<String, Integer> categoriesMap = new HashMap<>();
+                categoriesMap.put("value",0);
+
+                showMessage("Submitting project..");
+                for (int i=0; i<labelsArray.length ;i++){
+
+                    if(labelsArray[i].equals("")){
+
+                    }
+                    else{
+                        Map<String, String> labelsMap = new HashMap<>();
+                        labelsMap.put("id",labelsArray[i]);
+                        firebaseFirestore.collection("projects").document(uid+"_"+timestamp)
+                                .collection("labels").document(labelsArray[i]).set(labelsMap);
+
+
+                        for (int j=0; j<categoriesArray.length;j++) {
+                            if(categoriesArray[j].equals("")){
+
+                            }
+                            else{
+                                firebaseFirestore.collection("projects").document(uid + "_" + timestamp)
+                                        .collection("labels").document(labelsArray[i])
+                                        .collection("categories").document(categoriesArray[j]).set(categoriesMap);
+                            }
+
                         }
-                    });
-                }
-            });
-        }
 
+                    }
+
+
+
+                }
+
+                storageReference = FirebaseStorage.getInstance().getReference().child("project pictures");
+                final StorageReference imageFilePath = storageReference.child(pictureUri.getLastPathSegment());
+
+                imageFilePath.putFile(pictureUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        imageFilePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                storeProject(projectTitle, uri.toString());
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                showMessage(e.toString());
+                                categoriesTextView.setEnabled(true);
+                                labelsTextView.setEnabled(true);
+                                projectTitleTextView.setEnabled(true);
+                                submitButton.setEnabled(true);
+                                projectPicture.setEnabled(true);
+                            }
+                        });
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showMessage(e.toString());
+                        categoriesTextView.setEnabled(true);
+                        labelsTextView.setEnabled(true);
+                        projectTitleTextView.setEnabled(true);
+                        submitButton.setEnabled(true);
+                        projectPicture.setEnabled(true);
+                    }
+                });
+
+            }
+        }
     }
 
     public void addPicture(View view){
@@ -182,6 +237,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
             pictureUri = data.getData();
             projectPicture.setImageURI(pictureUri);
 
+            FLAG = false;
         }
 
         if (resultCode == RESULT_OK && requestCode == CAMERA_CODE && data != null) {
@@ -196,6 +252,8 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
                 pictureUri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null, null));
                 //ImgUserPhoto.setImageBitmap(bitmap);
                 projectPicture.setImageURI(pictureUri);
+
+                FLAG = false;
             }
 
         }
@@ -223,6 +281,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
                         Intent intent = new Intent(getApplicationContext(),UxShareActivity.class);
 
                         intent.putExtra("Project ID",uid+"_"+timestamp);
+                        intent.putExtra("timestamp",timestamp);
                         // start the activity
                         startActivity(intent);
                     }
@@ -235,8 +294,10 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
 
     }
 
-
-
+    public void backToMain(View view){
+        startActivity(new Intent(getApplicationContext(),UxMainActivity.class));
+        finish();
+    }
 
 
 }

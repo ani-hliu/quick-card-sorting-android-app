@@ -7,9 +7,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.qsort.R;
+import com.example.qsort.WelcomeActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -26,6 +28,9 @@ import java.util.TimerTask;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
+
 public class UxRegisterActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "EmailPassword";
     private EditText email;
@@ -34,6 +39,7 @@ public class UxRegisterActivity extends AppCompatActivity implements View.OnClic
     private EditText username;
     private EditText bio;
     private Button btnSignup;
+    private ProgressBar progressBar;
 
     private String strEmail = "";
     private String strPass = "";
@@ -62,11 +68,13 @@ public class UxRegisterActivity extends AppCompatActivity implements View.OnClic
         username = findViewById(R.id.username);
         bio = findViewById(R.id.bio);
         btnSignup = findViewById(R.id.register);
+        progressBar = findViewById(R.id.progressBarRegister);
 
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
         btnSignup.setOnClickListener(this);
+        progressBar.setVisibility(INVISIBLE);
     }
 
     @Override
@@ -105,6 +113,19 @@ public class UxRegisterActivity extends AppCompatActivity implements View.OnClic
             bio.getText().clear();
             return;
         }
+        // check if bio is too long
+        if (strPass.length()<6) {
+            Toast.makeText(this, "Please give a longer password (more than 6characters).", Toast.LENGTH_SHORT).show();
+            bio.getText().clear();
+            return;
+        }
+
+        email.setEnabled(false);
+        password.setEnabled(false);
+        password2.setEnabled(false);
+        username.setEnabled(false);
+        bio.setEnabled(false);
+        btnSignup.setEnabled(false);
 
         Toast.makeText(UxRegisterActivity.this, "Signing up!",
                 Toast.LENGTH_LONG).show();
@@ -114,6 +135,8 @@ public class UxRegisterActivity extends AppCompatActivity implements View.OnClic
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            progressBar.setVisibility(VISIBLE);
+
                             // register success, save user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             Toast.makeText(UxRegisterActivity.this, "Account created!",
@@ -148,9 +171,22 @@ public class UxRegisterActivity extends AppCompatActivity implements View.OnClic
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(UxRegisterActivity.this, task.getException().getMessage(),
                                     Toast.LENGTH_LONG).show();
-                        }
 
+                            email.setEnabled(true);
+                            password.setEnabled(true);
+                            password2.setEnabled(true);
+                            username.setEnabled(true);
+                            bio.setEnabled(true);
+                            btnSignup.setEnabled(true);
+                            progressBar.setVisibility(INVISIBLE);
+
+                        }
                     }
                 });
+    }
+
+    public void backToLogin(View view){
+        startActivity(new Intent(getApplicationContext(), UxLoginActivity.class));
+        finish();
     }
 }

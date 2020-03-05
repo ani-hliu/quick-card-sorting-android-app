@@ -79,7 +79,8 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginStart="15dp"
                 android:text="Need some guide on how to start?"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:onClick="guide"/>
 
         </LinearLayout>
 

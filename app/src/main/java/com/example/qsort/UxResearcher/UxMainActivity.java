@@ -2,11 +2,13 @@ package com.example.qsort.UxResearcher;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.qsort.Project;
 import com.example.qsort.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -60,13 +63,23 @@ public class UxMainActivity<map> extends AppCompatActivity {
     private String project_name;
     private String project_image;
     private String project_id;
-    ArrayList<Projects> projectList;
+    ArrayList<Project> projectList;
 
     private RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
     UxRecyclerViewAdapter recyclerViewAdapter;
 
     Context context;
+
+    String guideStr = "1. Create a project\nYou need a csv document. " +
+            "The first column of the document should be categories and the second column should be labels. " +
+            "Notice that if there’s a comma in your labels or categories, you will need to edit them on your own later. \n" +
+            "\n2. Share the project\n" +
+            "You can share the project by clicking on the share button. " +
+            "You can share the project to participants through email, QR code and a unique code. \n" +
+            "\n3. Disable or delete the project\n" +
+            "You can disable the project so that participants with the unique code could not access the project temporarily. " +
+            "Or, you can delete the project permanently.";
 
     static int FILE_REQUEST_CODE = 1;
     Uri filePath;
@@ -100,7 +113,7 @@ public class UxMainActivity<map> extends AppCompatActivity {
         layoutManager = new GridLayoutManager(this, 3);
         recyclerView.setLayoutManager(layoutManager);
 
-        Toast.makeText(UxMainActivity.this, "Loading images",
+        Toast.makeText(UxMainActivity.this, "Loading projects",
                 Toast.LENGTH_LONG).show();
 
         reloadProjects();
@@ -120,7 +133,7 @@ public class UxMainActivity<map> extends AppCompatActivity {
                                 project_name = document.getData().get("Project Name").toString();
                                 project_image = document.getData().get("Project Picture").toString();
                                 project_id = document.getData().get("Project ID").toString();
-                                Projects currentProject = new Projects(project_name, project_image, project_id);
+                                Project currentProject = new Project(project_name, project_image, project_id);
                                 projectList.add(currentProject);
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                             }
@@ -141,6 +154,20 @@ public class UxMainActivity<map> extends AppCompatActivity {
         finish();
         Toast.makeText(UxMainActivity.this, "Logged Out",
                 Toast.LENGTH_SHORT).show();
+    }
+
+    public void guide(View view){
+        AlertDialog.Builder builder = new AlertDialog.Builder(UxMainActivity.this);
+        builder.setTitle("Guide on how to use this app")
+        .setMessage(guideStr)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        closeContextMenu();
+                        closeOptionsMenu();
+                    }
+                });
+        builder.create().show();
+
     }
 
     public void addProject(View view){
