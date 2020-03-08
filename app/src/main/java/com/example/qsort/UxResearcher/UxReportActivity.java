@@ -2,20 +2,25 @@ package com.example.qsort.UxResearcher;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -54,6 +59,7 @@ public class UxReportActivity extends AppCompatActivity {
     private TextView labelLabel, categoryRank;
     private TextView reportUniqueCode;
     private Button labelButton;
+    private Switch enableSwitch;
 
     ArrayList<String> list = new ArrayList<>();
 
@@ -83,11 +89,26 @@ public class UxReportActivity extends AppCompatActivity {
         labelButtonRecyclerView = findViewById(R.id.labelButtonRecyclerView);
         reportUniqueCode = findViewById(R.id.reportUniqueCode);
         labelButton = findViewById(R.id.labelReportButton);
+        enableSwitch = findViewById(R.id.enableSwitch);
 
         labelLabel = findViewById(R.id.reportResult);
         categoryRank = findViewById(R.id.categoriesRank);
         displayProjectsInfo();
         displayProjectLabelButton();
+
+        enableSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    db.collection("projects").document(project_id)
+                            .update("Availability",true);
+                }
+                else{
+                    db.collection("projects").document(project_id)
+                            .update("Availability",false);
+                }
+            }
+        });
 
     }
 
@@ -204,5 +225,31 @@ public class UxReportActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void deleteProject(View view){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirm delete your project?");
+        builder.setMessage("You are about to delete your project and all records. Do you really want to proceed ?");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getApplicationContext(), "You've choosen to delete all records", Toast.LENGTH_SHORT).show();
+                db.collection("projects").document(project_id).delete();
+                startActivity(new Intent(getApplicationContext(),UxMainActivity.class));
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getApplicationContext(), "You've changed your mind to delete all records", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        builder.show();
+
+
+    }
 
 }

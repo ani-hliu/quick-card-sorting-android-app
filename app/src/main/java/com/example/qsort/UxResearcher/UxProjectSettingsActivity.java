@@ -35,6 +35,8 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.lang.Boolean.TRUE;
+
 public class UxProjectSettingsActivity extends AppCompatActivity {
 
     String categories, labels;
@@ -234,6 +236,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
         project.put("Project Picture",uri);
         project.put("Labels",labels);
         project.put("Categories",categories);
+        project.put("Availability", true);
 
 
 
