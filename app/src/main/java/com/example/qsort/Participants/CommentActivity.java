@@ -58,7 +58,7 @@ import static android.view.View.VISIBLE;
 import static android.widget.Toast.LENGTH_SHORT;
 
 public class CommentActivity extends AppCompatActivity {
-    private static final String TAG = "Comment";
+    private static final String TAG = "TextComment";
     private EditText commentEdit;
     private TextView whichLabel;
     private TextView commentProgress;
@@ -79,7 +79,7 @@ public class CommentActivity extends AppCompatActivity {
     private StorageReference storageReference;
 
     private MediaRecorder mediaRecorder;
-    private MediaPlayer mediaPlayer;
+//    private MediaPlayer mediaPlayer;
     private String mFilename = null;
     private final int MY_PERMISSIONS_RECORD_AUDIO = 1000;
 
@@ -179,7 +179,8 @@ public class CommentActivity extends AppCompatActivity {
 //                btnVoicePlay.setEnabled(false);
 //                mediaPlayer = new MediaPlayer();
 //                try{
-//                    mediaPlayer.setDataSource(mFilename);
+//                    // storage reference stored in database
+//                    mediaPlayer.setDataSource("");
 //                    mediaPlayer.prepare();
 //                }
 //                catch (IOException e) {
