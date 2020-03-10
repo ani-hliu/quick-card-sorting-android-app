@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.bumptech.glide.Glide;
+import com.example.qsort.Participants.CommentActivity;
 import com.example.qsort.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -210,4 +211,12 @@ public class UxReportActivity extends AppCompatActivity {
     }
 
 
+    public void comment(View view) {
+        Intent intent = new Intent(getApplicationContext(), CommentActivity.class);
+
+        intent.putExtra("Project_id",userId+"_"+timestamp);
+        intent.putExtra("label","Contact");
+        // start the activity
+        startActivity(intent);
+    }
 }
