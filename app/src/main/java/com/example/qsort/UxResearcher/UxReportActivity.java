@@ -47,7 +47,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 public class UxReportActivity extends AppCompatActivity {
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "UxReportActivity";
     private ImageView projectView;
     private TextView projectName;
     private TextView projectTime;
@@ -129,7 +129,14 @@ public class UxReportActivity extends AppCompatActivity {
 
     }
 
-    public void backToMain(View view){
+//    public void backToMain(View view){
+//        startActivity(new Intent(getApplicationContext(),UxMainActivity.class));
+//        finish();
+//    }
+
+    @Override
+    public void onBackPressed()
+    {
         startActivity(new Intent(getApplicationContext(),UxMainActivity.class));
         finish();
     }

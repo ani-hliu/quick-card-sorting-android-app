@@ -8,19 +8,19 @@
     android:gravity="center"
     >
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="200dp">
+<!--    <RelativeLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:layout_marginLeft="200dp">-->
 
-        <Button
-            android:id="@+id/backButtonLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/back"
-            android:onClick="backToWelcome"/>
-    </RelativeLayout>
+<!--        <Button-->
+<!--            android:id="@+id/backButtonLogin"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/back"-->
+<!--            android:onClick="backToWelcome"/>-->
+<!--    </RelativeLayout>-->
 
 
     <TextView
@@ -80,18 +80,16 @@
         android:text="Sign up"
         android:layout_marginTop="10dp"
         android:textAllCaps="false"
-        android:gravity="center"
-        android:layout_marginBottom="120dp"/>
+        android:gravity="center" />
 
     <ProgressBar
         android:id="@+id/loading"
-        android:layout_width="93dp"
-        android:layout_height="67dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:gravity="center"
         android:textAllCaps="false"
         android:visibility="gone" />
-
 
 </LinearLayout>

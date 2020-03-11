@@ -19,7 +19,6 @@
         android:requestLegacyExternalStorage="true">
         <activity android:name=".UxResearcher.UxReportActivity" />
         <activity android:name=".Participants.PartiMainActivity" />
-        <activity android:name=".Participants.PartiSortActivity" />
         <activity android:name=".Participants.PartiWelcomeActivity" />
         <activity android:name=".Participants.CommentActivity" />
         <activity android:name=".UxResearcher.UxShareActivity" />

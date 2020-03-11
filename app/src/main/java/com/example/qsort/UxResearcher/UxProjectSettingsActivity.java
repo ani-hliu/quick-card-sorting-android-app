@@ -1,9 +1,12 @@
 package com.example.qsort.UxResearcher;
 
+import androidmads.library.qrgenearator.QRGContents;
+import androidmads.library.qrgenearator.QRGEncoder;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -30,6 +33,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.google.zxing.WriterException;
 
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
@@ -39,6 +43,7 @@ import static java.lang.Boolean.TRUE;
 
 public class UxProjectSettingsActivity extends AppCompatActivity {
 
+    private static final String TAG = "UxProjectSettingActivity";
     String categories, labels;
     EditText categoriesTextView,labelsTextView,projectTitleTextView;
     ImageView projectPicture;
@@ -252,7 +257,23 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 });
+
+//        generateQR();
     }
+
+//    @SuppressLint("LongLogTag")
+//    private void generateQR() {
+//        QRGEncoder qrgEncoder = new QRGEncoder(uid+"_"+timestamp, null, QRGContents.Type.TEXT, 150);
+//        try {
+//            // Getting QR-Code as Bitmap
+//            Bitmap bitmap = qrgEncoder.encodeAsBitmap();
+//
+//
+//        } catch (WriterException e) {
+//            Log.v(TAG, e.toString());
+//        }
+//
+//    }
 
     private void showMessage(String message) {
 

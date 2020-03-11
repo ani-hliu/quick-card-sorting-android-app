@@ -41,7 +41,7 @@ public class UxViewCommentsActivity extends AppCompatActivity {
     private static final String TAG = "UxViewCommentsActivity";
     private TextView projectName;
     private TextView whichLabel;
-    private Button btnBack;
+//    private Button btnBack;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private String projectNameStr;
@@ -84,7 +84,7 @@ public class UxViewCommentsActivity extends AppCompatActivity {
 
         projectName = findViewById(R.id.commentProjectName);
         whichLabel = findViewById(R.id.commentLabel);
-        btnBack = findViewById(R.id.backButton);
+//        btnBack = findViewById(R.id.backButton);
         textCommentsList  = new ArrayList<>();
         voiceCommentsList = new ArrayList<>();
 
@@ -161,7 +161,13 @@ public class UxViewCommentsActivity extends AppCompatActivity {
     }
 
     // don't know the content, to make it simple, jump to main
-    public void backToMain(View view){
+//    public void backToMain(View view){
+//        finish();
+//    }
+
+    @Override
+    public void onBackPressed()
+    {
         finish();
     }
 }

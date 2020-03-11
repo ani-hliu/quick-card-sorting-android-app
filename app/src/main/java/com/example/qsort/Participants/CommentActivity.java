@@ -344,10 +344,17 @@ public class CommentActivity extends AppCompatActivity {
                 });
     }
 
-    public void backToLogin(View view){
-        startActivity(new Intent(getApplicationContext(), PartiMainActivity.class));
-        finish();
-    }
+//    public void backToLogin(View view){
+//        startActivity(new Intent(getApplicationContext(), PartiMainActivity.class));
+//        finish();
+//    }
+
+//    @Override
+//    public void onBackPressed()
+//    {
+//        startActivity(new Intent(getApplicationContext(), PartiMainActivity.class));
+//        finish();
+//    }
 
     public void submitComment(View view) {
         // check if the user has choose a profile image
@@ -380,7 +387,7 @@ public class CommentActivity extends AppCompatActivity {
             uploadVoiceComment();
             FLAG = false;
         }
-        
+
         finish();
 
     }
