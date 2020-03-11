@@ -34,12 +34,14 @@
         android:id="@+id/codeLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="52dp"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="48dp"
+        android:fontFamily="@font/lato_bold"
         android:text="@string/your_unique_code"
-        android:textSize="18sp"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@color/colorBlack"/>
 
     <!--    <Button-->
     <!--        android:id="@+id/backButton"-->
@@ -57,9 +59,9 @@
         android:id="@+id/uniqueCodeTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="54dp"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="54dp"
+        android:layout_marginEnd="30dp"
         android:textColor="@color/colorAccent"
         android:textIsSelectable="true"
         android:textSize="40sp"
@@ -72,12 +74,14 @@
         android:id="@+id/emailHintLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="54dp"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
+        android:fontFamily="@font/lato_bold"
         android:text="@string/participant_s_email"
-        android:textSize="18sp"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        android:textColor="@color/colorBlack"/>
 
     <Button
         android:id="@+id/emailButton"
@@ -96,10 +100,11 @@
         android:id="@+id/emailTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="54dp"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="54dp"
+        android:layout_marginEnd="30dp"
         android:ems="10"
+        android:fontFamily="@font/lato"
         android:hint="Email addresses"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
@@ -112,12 +117,14 @@
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="54dp"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
+        android:fontFamily="@font/lato_bold"
         android:text="Project QR code:"
-        android:textSize="18sp"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/uniqueCodeTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/uniqueCodeTextView"
+        android:textColor="@color/colorBlack"/>
 
     <ImageView
         android:id="@+id/imageView"

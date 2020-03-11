@@ -99,10 +99,6 @@ public class PartiReviewActivity extends FragmentActivity {
         }
     }
 
-//    public void backToEnterCode(View view){
-//        startActivity(new Intent(getApplicationContext(), PartiWelcomeActivity.class));
-//        finish();
-//    }
 
     @Override
     public void onBackPressed()
@@ -142,6 +138,8 @@ public class PartiReviewActivity extends FragmentActivity {
                 startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
             }
         });
+
+        showMessage("Thank you for your participant! Bye!");
     }
 
     public static int getIndexOf(String[] strings, String item) {
