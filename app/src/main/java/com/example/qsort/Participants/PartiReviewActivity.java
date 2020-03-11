@@ -99,7 +99,14 @@ public class PartiReviewActivity extends FragmentActivity {
         }
     }
 
-    public void backToEnterCode(View view){
+//    public void backToEnterCode(View view){
+//        startActivity(new Intent(getApplicationContext(), PartiWelcomeActivity.class));
+//        finish();
+//    }
+
+    @Override
+    public void onBackPressed()
+    {
         startActivity(new Intent(getApplicationContext(), PartiWelcomeActivity.class));
         finish();
     }

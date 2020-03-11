@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.qsort.R;
@@ -15,8 +16,9 @@ public class UxShareActivity extends AppCompatActivity {
 
     TextView uniqueCodeTextView;
     EditText emailTextView;
-    Button QRcodeButton, emailButton;
+    Button emailButton;
     String projectID, timestamp;
+    ImageView QRcode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +26,7 @@ public class UxShareActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ux_share);
 
         uniqueCodeTextView = findViewById(R.id.uniqueCodeTextView);
-        QRcodeButton = findViewById(R.id.QRcodeButton);
+//        QRcodeButton = findViewById(R.id.QRcodeButton);
         emailButton = findViewById(R.id.emailButton);
         emailTextView = findViewById(R.id.emailTextView);
 
@@ -54,12 +56,18 @@ public class UxShareActivity extends AppCompatActivity {
         emailTextView.setText("");
     }
 
-    public void backToMain(View view){
+//    public void backToMain(View view){
+//        Intent intent = new Intent(getApplicationContext(), UxReportActivity.class);
+//        intent.putExtra("project_id",projectID);
+//        startActivity(intent);
+//    }
+
+    @Override
+    public void onBackPressed()
+    {
         Intent intent = new Intent(getApplicationContext(), UxReportActivity.class);
         intent.putExtra("project_id",projectID);
         startActivity(intent);
     }
-
-
 
 }

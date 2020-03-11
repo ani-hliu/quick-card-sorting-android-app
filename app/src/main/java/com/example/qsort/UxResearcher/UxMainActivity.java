@@ -23,6 +23,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.qsort.Project;
 import com.example.qsort.R;
+import com.example.qsort.WelcomeActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -224,6 +225,11 @@ public class UxMainActivity<map> extends AppCompatActivity {
         }
     }
 
-
+    @Override
+    public void onBackPressed()
+    {
+        Intent intent = new Intent(this, WelcomeActivity.class);
+        startActivity(intent);
+    }
 
 }
