@@ -1,7 +1,6 @@
 package com.example.qsort.Participants;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -12,17 +11,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.qsort.R;
-import com.example.qsort.UxResearcher.UxProjectSettingsActivity;
 import com.example.qsort.WelcomeActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QuerySnapshot;
 
 public class PartiWelcomeActivity extends AppCompatActivity {
 
@@ -31,6 +24,7 @@ public class PartiWelcomeActivity extends AppCompatActivity {
 
     String projectID;
     String categories, labels;
+    Boolean project_availability;
 
     FirebaseFirestore firebaseFirestore;
 
@@ -52,7 +46,6 @@ public class PartiWelcomeActivity extends AppCompatActivity {
             showMessage("Please enter your unique code");
             return;
         }
-        System.out.println(projectID);
         firebaseFirestore.collection("projects").document(projectID).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -62,15 +55,24 @@ public class PartiWelcomeActivity extends AppCompatActivity {
                             if(documentSnapshot.exists()){
                                 categories = documentSnapshot.getData().get("Categories").toString();
                                 labels = documentSnapshot.getData().get("Labels").toString();
+                                project_availability = documentSnapshot.getBoolean("Availability");
 
-                                System.out.println(categories);
+                                if(project_availability){
+                                    Intent intent = new Intent(getApplicationContext(), PartiMainActivity.class);
 
-                                Intent intent = new Intent(getApplicationContext(), PartiMainActivity.class);
+                                    intent.putExtra("Categories",categories);
+                                    intent.putExtra("Labels",labels);
+                                    intent.putExtra("project_id",projectID);
 
-                                intent.putExtra("Categories",categories);
-                                intent.putExtra("Labels",labels);
+                                    startActivity(intent);
 
-                                startActivity(intent);
+                                }
+                                else {
+                                    showMessage("Project is no longer available!");
+                                }
+
+
+
                             }
                             else{
                                 showMessage("Project does not exists!");

@@ -63,7 +63,9 @@ public class UxMainActivity<map> extends AppCompatActivity {
     private String project_name;
     private String project_image;
     private String project_id;
+    private Boolean project_availability;
     ArrayList<Project> projectList;
+
 
     private RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
@@ -133,7 +135,8 @@ public class UxMainActivity<map> extends AppCompatActivity {
                                 project_name = document.getData().get("Project Name").toString();
                                 project_image = document.getData().get("Project Picture").toString();
                                 project_id = document.getData().get("Project ID").toString();
-                                Project currentProject = new Project(project_name, project_image, project_id);
+                                project_availability = document.getBoolean("Availability");
+                                Project currentProject = new Project(project_name, project_image, project_id, project_availability);
                                 projectList.add(currentProject);
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                             }
@@ -218,8 +221,6 @@ public class UxMainActivity<map> extends AppCompatActivity {
             intent.putExtra("Labels",labels.toString());
             // start the activity
             startActivity(intent);
-
-
         }
     }
 
