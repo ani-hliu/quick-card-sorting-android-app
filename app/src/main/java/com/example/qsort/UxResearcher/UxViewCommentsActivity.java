@@ -57,7 +57,7 @@ public class UxViewCommentsActivity extends AppCompatActivity {
 
     private RecyclerView voiceRecyclerView;
     private RecyclerView textRecyclerView;
-    RecyclerView.LayoutManager layoutManager;
+    RecyclerView.LayoutManager layoutManager_voice, layoutManager_text;
     UxTextCommentAdapter textCommentAdapter;
     UxVoiceCommentAdapter voiceCommentAdapter;
 
@@ -93,9 +93,11 @@ public class UxViewCommentsActivity extends AppCompatActivity {
 
         voiceRecyclerView = findViewById(R.id.voiceCommentRecyclerView);
         textRecyclerView = findViewById(R.id.textCommentRecyclerView);
-        layoutManager = new GridLayoutManager(this, 1);
-        voiceRecyclerView.setLayoutManager(layoutManager);
-        textRecyclerView.setLayoutManager(layoutManager);
+        layoutManager_voice = new GridLayoutManager(this, 1);
+        layoutManager_text = new GridLayoutManager(this, 1);
+
+        voiceRecyclerView.setLayoutManager(layoutManager_voice);
+        textRecyclerView.setLayoutManager(layoutManager_text);
 
         Toast.makeText(UxViewCommentsActivity.this, "Loading comments",
                 Toast.LENGTH_LONG).show();
@@ -160,7 +162,6 @@ public class UxViewCommentsActivity extends AppCompatActivity {
 
     // don't know the content, to make it simple, jump to main
     public void backToMain(View view){
-        startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
         finish();
     }
 }

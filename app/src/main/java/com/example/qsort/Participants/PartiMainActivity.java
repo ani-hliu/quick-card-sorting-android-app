@@ -11,9 +11,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.qsort.R;
-import com.example.qsort.UxResearcher.UxReportActivity;
-import com.example.qsort.UxResearcher.UxReportButtonAdapter;
-import com.example.qsort.UxResearcher.UxShareActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,14 +23,14 @@ public class PartiMainActivity extends AppCompatActivity {
 
     String categories, labels, project_id;
     String[] labelsArray,categoriesArray;
-    Button submitSortButton;
+    Button reviewSortButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parti_main);
 
-        submitSortButton = findViewById(R.id.submitSortButton);
+        reviewSortButton = findViewById(R.id.reviewSortButton);
 
         Intent intent = getIntent();
 
@@ -62,7 +59,9 @@ public class PartiMainActivity extends AppCompatActivity {
         final SortAdapter myAdapter = new SortAdapter(PartiMainActivity.this,labelsArray,newArray,list,project_id);
         layoutManager = new GridLayoutManager(PartiMainActivity.this, 1);
         sortRecyclerView.setLayoutManager(layoutManager);
-        sortRecyclerView.setAdapter(myAdapter);submitSortButton.setOnClickListener(new View.OnClickListener() {
+        sortRecyclerView.setAdapter(myAdapter);
+
+        reviewSortButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

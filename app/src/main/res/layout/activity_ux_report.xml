@@ -211,6 +211,13 @@ tools:context=".UxResearcher.UxReportActivity">
                 android:layout_marginTop="20dp"
                 android:text="Click label to find out the results"
                 android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/viewCommentsButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="View Comments"
+                android:onClick="viewComments"/>
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
