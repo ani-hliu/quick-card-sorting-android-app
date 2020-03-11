@@ -63,8 +63,9 @@ tools:context=".UxResearcher.UxReportActivity">
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/lato"
                     android:text="Participants: "
+                    android:textColor="@color/colorBlack"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/reportPartiNum"
@@ -72,20 +73,28 @@ tools:context=".UxResearcher.UxReportActivity">
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:text="0"
+                    android:textColor="@color/colorBlack"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                    android:textSize="20sp"/>
+                    android:textSize="18sp"/>
 
             </LinearLayout>
 
             <TextView
                 android:id="@+id/reportProjectTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/lato"
+                android:text="Project time"
+                android:textColor="@color/colorBlack"
+                android:textSize="18sp" />
+
+            <Switch
+                android:id="@+id/enableSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
                 android:fontFamily="@font/lato"
-                android:text="project set up time"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                android:textSize="20sp" />
+                android:text="Enabled"
+                android:textSize="18sp" />
 
         </LinearLayout>
 
@@ -121,15 +130,6 @@ tools:context=".UxResearcher.UxReportActivity">
                 android:textAllCaps="false"
                 android:onClick="deleteProject"/>
 
-            <Switch
-                android:id="@+id/enableSwitch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/lato"
-                android:text="Enabled" />
-
-
 
         </LinearLayout>
 
@@ -137,28 +137,29 @@ tools:context=".UxResearcher.UxReportActivity">
 
 </RelativeLayout>
 
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_centerHorizontal="true">
-
-    <TextView
-        android:id="@+id/reportUniqueCode"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="15dp"
-        android:fontFamily="@font/lato"
-        android:text="project set up code"
-        android:textColor="@color/colorAccent"
-        android:textIsSelectable="true"
-        android:textSize="20sp" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/reportUniqueCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="15dp"
+            android:fontFamily="@font/lato"
+            android:text="project set up code"
+            android:textColor="@color/colorAccent"
+            android:textIsSelectable="true"
+            android:textSize="20sp" />
 
 
-</RelativeLayout>
+    </RelativeLayout>
 
 <RelativeLayout
     android:layout_width="match_parent"
@@ -168,27 +169,30 @@ tools:context=".UxResearcher.UxReportActivity">
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/reportLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_marginLeft="30dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/lato"
             android:text="Labels"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="24sp"/>
+            android:textSize="24sp" />
 
         <TextView
             android:id="@+id/reportResult"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_marginLeft="50dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/lato"
             android:text="Card sorting results"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textSize="24sp"/>
+            android:textSize="24sp" />
 
     </LinearLayout>
 
@@ -205,6 +209,7 @@ tools:context=".UxResearcher.UxReportActivity">
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             android:layout_toEndOf="@+id/labelButtonRecyclerView"
             android:orientation="vertical">
 
@@ -213,6 +218,7 @@ tools:context=".UxResearcher.UxReportActivity">
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:fontFamily="@font/lato"
                 android:text="Click label to find out the results"
                 android:textSize="18sp" />
 
@@ -220,15 +226,16 @@ tools:context=".UxResearcher.UxReportActivity">
                 android:id="@+id/viewCommentsButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="View Comments"
-                android:onClick="viewComments"/>
+                android:onClick="viewComments"
+                android:text="View Comments" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/labelButtonRecyclerView"
-        android:layout_width="120dp"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical" />
+            android:id="@+id/labelButtonRecyclerView"
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:scrollbars="vertical" />
 
     </RelativeLayout>
 

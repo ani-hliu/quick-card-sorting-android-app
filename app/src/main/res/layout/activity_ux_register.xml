@@ -35,7 +35,7 @@
         android:fontFamily="@font/lato"
         android:gravity="center"
         android:text="Please sign in first: "
-        android:textSize="20sp" />
+        android:textSize="18sp" />
 
     <EditText
         android:id="@+id/email"
@@ -45,7 +45,8 @@
         android:ems="10"
         android:fontFamily="@font/lato"
         android:hint="Email Addresss"
-        android:inputType="textEmailAddress" />
+        android:inputType="textEmailAddress"
+        android:textSize="18sp"/>
 
     <EditText
         android:id="@+id/password"

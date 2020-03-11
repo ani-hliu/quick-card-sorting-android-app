@@ -13,6 +13,7 @@
         android:onClick="displayRank"
         android:text="@string/label"
         android:textAllCaps="false"
+        android:fontFamily="@font/lato"
 
         />
 </LinearLayout>

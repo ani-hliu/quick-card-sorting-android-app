@@ -40,7 +40,7 @@ public class UxTextCommentAdapter extends RecyclerView.Adapter<UxTextCommentAdap
             timestampLong = timestampLong * 1000;
         }
 
-        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Date date = new Date(Long.parseLong(String.valueOf(timestampLong)));
         String sd = sf.format(new Date(Long.parseLong(String.valueOf(timestampLong))));
         holder.timestamp.setText(sd);

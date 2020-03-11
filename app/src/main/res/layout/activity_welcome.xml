@@ -14,7 +14,8 @@
         android:textSize="24sp"
         android:textStyle="bold"
         android:gravity="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+        android:fontFamily="@font/lato_bold"
+        android:textColor="@color/colorBlack"/>
 
     <Button
         android:id="@+id/btnParti"

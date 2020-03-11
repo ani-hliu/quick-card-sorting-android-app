@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Participants.PartiReviewActivity">
+    tools:context=".Participants.PartiReviewActivity"
+    android:layout_marginLeft="30dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginRight="30dp">
 
 
     <androidx.viewpager.widget.ViewPager
@@ -16,7 +19,8 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="0.0"
+        >
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tab_layout"
@@ -27,7 +31,10 @@
             app:tabMode="scrollable"
             app:tabPaddingStart="0dp"
             app:tabSelectedTextColor="@color/colorBlack"
-            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget" />
+            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
+
+            />
+
 
     </androidx.viewpager.widget.ViewPager>
 
