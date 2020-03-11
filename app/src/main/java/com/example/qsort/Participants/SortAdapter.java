@@ -107,13 +107,13 @@ public class SortAdapter extends RecyclerView.Adapter<com.example.qsort.Particip
 
         TextView labelToSort;
         Spinner categorySpinner;
-        Button commentButton;
+        LinearLayout commentButton;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             labelToSort = itemView.findViewById(R.id.labelToSort);
             categorySpinner = itemView.findViewById(R.id.categorySpinner);
-            commentButton = itemView.findViewById(R.id.commentButton);
+            commentButton = itemView.findViewById(R.id.commentLinearLayout);
         }
     }
 

@@ -22,13 +22,16 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.qsort.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -121,6 +124,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
                 categoriesMap.put("value",0);
 
                 showMessage("Submitting project..");
+
                 for (int i=0; i<labelsArray.length;i++){
                     Map<String, String> labelsMap = new HashMap<>();
                     labelsMap.put("id",labelsArray[i]);
@@ -156,6 +160,11 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
                         }
                     });
                 }
+
+
+
+
+
             }
         }
     }
@@ -242,8 +251,6 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
         project.put("Labels",labels);
         project.put("Categories",categories);
         project.put("Availability", true);
-
-
 
         firebaseFirestore.collection("projects").document(uid+"_"+timestamp).set(project)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

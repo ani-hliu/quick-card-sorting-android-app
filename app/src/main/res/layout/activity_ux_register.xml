@@ -20,21 +20,22 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
+        android:gravity="center"
         android:text="Welcome to QSort!"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="24sp"
-        android:textStyle="bold"
-        android:gravity="center"/>
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
+        android:fontFamily="@font/lato"
+        android:gravity="center"
         android:text="Please sign in first: "
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:gravity="center"/>
+        android:textSize="20sp" />
 
     <EditText
         android:id="@+id/email"
@@ -42,6 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:ems="10"
+        android:fontFamily="@font/lato"
         android:hint="Email Addresss"
         android:inputType="textEmailAddress" />
 
@@ -51,6 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:ems="10"
+        android:fontFamily="@font/lato"
         android:hint="Password"
         android:inputType="textPassword" />
 
@@ -60,6 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:ems="10"
+        android:fontFamily="@font/lato"
         android:hint="Confirm password"
         android:inputType="textPassword" />
 
@@ -69,6 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:ems="10"
+        android:fontFamily="@font/lato"
         android:hint="Username"
         android:inputType="textPersonName" />
 
@@ -78,6 +83,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:ems="10"
+        android:fontFamily="@font/lato"
         android:hint="A short bio of yourself"
         android:inputType="textPersonName" />
 

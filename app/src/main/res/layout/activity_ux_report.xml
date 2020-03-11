@@ -43,6 +43,7 @@ tools:context=".UxResearcher.UxReportActivity">
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:fontFamily="@font/lato_bold"
                 android:text="Project Name"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textSize="24sp" />
@@ -60,9 +61,10 @@ tools:context=".UxResearcher.UxReportActivity">
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:fontFamily="@font/lato"
                     android:text="Participants: "
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                    android:textSize="20sp"/>
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/reportPartiNum"
@@ -80,6 +82,7 @@ tools:context=".UxResearcher.UxReportActivity">
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:fontFamily="@font/lato"
                 android:text="project set up time"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                 android:textSize="20sp" />
@@ -123,8 +126,8 @@ tools:context=".UxResearcher.UxReportActivity">
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Enabled"
-                />
+                android:fontFamily="@font/lato"
+                android:text="Enabled" />
 
 
 
@@ -144,14 +147,15 @@ tools:context=".UxResearcher.UxReportActivity">
         android:id="@+id/reportUniqueCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="15dp"
         android:layout_marginTop="5dp"
+        android:layout_marginRight="15dp"
+        android:fontFamily="@font/lato"
         android:text="project set up code"
         android:textColor="@color/colorAccent"
-        android:textSize="20sp"
-        android:layout_centerInParent="true"
         android:textIsSelectable="true"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"/>
+        android:textSize="20sp" />
 
 
 </RelativeLayout>

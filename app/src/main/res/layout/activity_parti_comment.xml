@@ -26,6 +26,7 @@
             android:id="@+id/leaveComment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
             android:gravity="center"
             android:text="Label: "
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
@@ -36,6 +37,7 @@
             android:id="@+id/whichLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/lato"
             android:gravity="center"
             android:text="Label"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
@@ -50,11 +52,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
+        android:fontFamily="@font/lato"
+        android:gravity="center"
         android:text="Leave a voice comment:"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:gravity="center"/>
+        android:textSize="20sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -98,20 +100,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
+        android:fontFamily="@font/lato"
+        android:gravity="center"
         android:text="Or / And"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:gravity="center"/>
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
+        android:fontFamily="@font/lato"
+        android:gravity="center"
         android:text="Leave a text comment:"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:gravity="center"/>
+        android:textSize="20sp" />
 
     <EditText
         android:id="@+id/textComment"
@@ -119,10 +121,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:ems="10"
-        android:maxLines="4"
-        android:lines="2"
+        android:fontFamily="@font/lato"
         android:hint="please input your comment"
-        android:inputType="textEmailAddress" />
+        android:inputType="textEmailAddress"
+        android:lines="2"
+        android:maxLines="4" />
 
     <Button
         android:id="@+id/submitCommentBtn"

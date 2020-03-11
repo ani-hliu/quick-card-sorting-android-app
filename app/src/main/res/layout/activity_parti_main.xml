@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="54dp"
         android:layout_marginTop="40dp"
+        android:fontFamily="@font/lato_bold"
         android:text="@string/card_sorting"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"

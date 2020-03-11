@@ -16,6 +16,8 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,7 +59,7 @@ public class UxMainActivity<map> extends AppCompatActivity {
     private TextView username;
     private TextView bio;
 //    private Button btnLogout;
-    private Button btnGuide;
+    private LinearLayout btnGuide;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private String userId;
@@ -100,7 +102,7 @@ public class UxMainActivity<map> extends AppCompatActivity {
 
         username = findViewById(R.id.username);
         bio = findViewById(R.id.bio);
-        btnGuide = findViewById(R.id.guideButton);
+        btnGuide = findViewById(R.id.guideLinearLayout);
         projectList  = new ArrayList<>();
 
         DocumentReference documentReference = db.collection("Users").document(userId);
