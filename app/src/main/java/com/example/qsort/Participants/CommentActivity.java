@@ -2,7 +2,6 @@ package com.example.qsort.Participants;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -381,8 +380,7 @@ public class CommentActivity extends AppCompatActivity {
             uploadVoiceComment();
             FLAG = false;
         }
-
-//        startActivity(new Intent(getApplicationContext(), PartiMainActivity.class));
+        
         finish();
 
     }
