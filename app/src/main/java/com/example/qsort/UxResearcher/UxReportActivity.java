@@ -61,6 +61,7 @@ public class UxReportActivity extends AppCompatActivity {
     private TextView reportUniqueCode;
     private Button labelButton;
     private Switch enableSwitch;
+    private Button viewCommentsButton;
 
     ArrayList<String> list = new ArrayList<>();
 
@@ -91,11 +92,26 @@ public class UxReportActivity extends AppCompatActivity {
         reportUniqueCode = findViewById(R.id.reportUniqueCode);
         labelButton = findViewById(R.id.labelReportButton);
         enableSwitch = findViewById(R.id.enableSwitch);
+        viewCommentsButton = findViewById(R.id.viewCommentsButton);
+
 
         labelLabel = findViewById(R.id.reportResult);
         categoryRank = findViewById(R.id.categoriesRank);
         displayProjectsInfo();
         displayProjectLabelButton();
+
+        if(labelLabel.getText().toString().equals("Card sorting results")){
+            viewCommentsButton.setVisibility(View.INVISIBLE);
+            viewCommentsButton.setEnabled(false);
+        }
+
+        db.collection("projects").document(project_id)
+                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                enableSwitch.setChecked(documentSnapshot.getBoolean("Availability"));
+            }
+        });
 
         enableSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -179,18 +195,11 @@ public class UxReportActivity extends AppCompatActivity {
     }
 
     public void displayRank(View view){
-        // Restore state
-//        labelButtonRecyclerView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
-//
-//        UxReportButtonAdapter myAdapter = new UxReportButtonAdapter(UxReportActivity.this,list,project_id);
-//        labelButtonRecyclerView.setAdapter(myAdapter);
 
-//        labelButton.setBackgroundColor(Color.RED);
-
+        viewCommentsButton.setVisibility(View.VISIBLE);
+        viewCommentsButton.setEnabled(true);
         final Button labelButton = (Button)view;
         final String labelButtonText = labelButton.getText().toString();
-//
-//        labelButton.setBackgroundColor(Color.GREEN);
 
         db.collection("projects").document(project_id)
                 .collection("labels").document(labelButtonText)
@@ -250,7 +259,14 @@ public class UxReportActivity extends AppCompatActivity {
 
         builder.show();
 
+    }
 
+    public void viewComments(View view){
+        Intent intent = new Intent(getApplicationContext(), UxViewCommentsActivity.class);
+        intent.putExtra("project_name",projectName.getText());
+        intent.putExtra("which_label",labelLabel.getText());
+        intent.putExtra("project_id",project_id);
+        startActivity(intent);
     }
 
 }

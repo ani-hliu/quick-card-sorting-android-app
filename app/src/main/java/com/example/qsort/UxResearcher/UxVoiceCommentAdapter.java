@@ -18,7 +18,9 @@ import com.example.qsort.VoiceComment;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,7 +45,17 @@ public class UxVoiceCommentAdapter extends RecyclerView.Adapter<UxVoiceCommentAd
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
-        holder.timestamp.setText(voiceComments.get(position).getTimestamp());
+
+        Long timestampLong = Long.parseLong(String.valueOf(voiceComments.get(position).getTimestamp()));
+        if (timestampLong < 10000000000L) {
+            timestampLong = timestampLong * 1000;
+        }
+
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date date = new Date(Long.parseLong(String.valueOf(timestampLong)));
+        String sd = sf.format(new Date(Long.parseLong(String.valueOf(timestampLong))));
+        holder.timestamp.setText(sd);
+
         holder.btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

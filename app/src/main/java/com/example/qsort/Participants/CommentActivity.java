@@ -278,7 +278,7 @@ public class CommentActivity extends AppCompatActivity {
         filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                mProgress.dismiss();
+//                mProgress.dismiss();
                 commentProgress.setText("Uploading finished.");
                 filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
@@ -382,7 +382,7 @@ public class CommentActivity extends AppCompatActivity {
             FLAG = false;
         }
 
-        startActivity(new Intent(getApplicationContext(), PartiMainActivity.class));
+//        startActivity(new Intent(getApplicationContext(), PartiMainActivity.class));
         finish();
 
     }

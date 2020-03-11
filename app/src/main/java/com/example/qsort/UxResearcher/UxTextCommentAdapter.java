@@ -9,7 +9,9 @@ import android.widget.TextView;
 import com.example.qsort.R;
 import com.example.qsort.TextComment;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,7 +35,15 @@ public class UxTextCommentAdapter extends RecyclerView.Adapter<UxTextCommentAdap
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, final int position) {
-        holder.timestamp.setText(textComments.get(position).getTimestamp());
+        Long timestampLong = Long.parseLong(String.valueOf(textComments.get(position).getTimestamp()));
+        if (timestampLong < 10000000000L) {
+            timestampLong = timestampLong * 1000;
+        }
+
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date(Long.parseLong(String.valueOf(timestampLong)));
+        String sd = sf.format(new Date(Long.parseLong(String.valueOf(timestampLong))));
+        holder.timestamp.setText(sd);
         holder.comment.setText(textComments.get(position).getTextComment());
     }
 
