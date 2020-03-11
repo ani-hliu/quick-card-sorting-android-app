@@ -35,16 +35,19 @@ import java.util.List;
 public class SortAdapter extends RecyclerView.Adapter<com.example.qsort.Participants.SortAdapter.MyViewHolder> {
     String[] labelList;
     String[] categoryList;
+    String project_id;
 
     List<String> list;
     private Context mContext;
 
 
-    public SortAdapter(Context context, String[] labelList, String[] categoryList, List<String> list){
+    public SortAdapter(Context context, String[] labelList, String[] categoryList, List<String> list, String project_id){
         this.mContext = context;
         this.labelList = labelList;
         this.categoryList = categoryList;
         this.list = list;
+        this.project_id = project_id;
+
     }
 
     @NonNull
@@ -76,6 +79,18 @@ public class SortAdapter extends RecyclerView.Adapter<com.example.qsort.Particip
             public void onNothingSelected(AdapterView<?> parent) {
                 Toast.makeText(mContext,"Please make all selections adapter",Toast.LENGTH_SHORT).show();
                 return;
+            }
+        });
+
+        holder.commentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, CommentActivity.class);
+
+                intent.putExtra("Project_id",project_id);
+                intent.putExtra("label",labelList[position]);
+                // start the activity
+                mContext.startActivity(intent);
             }
         });
 
