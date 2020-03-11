@@ -253,12 +253,4 @@ public class UxReportActivity extends AppCompatActivity {
 
     }
 
-    public void comment(View view) {
-        Intent intent = new Intent(getApplicationContext(), CommentActivity.class);
-
-        intent.putExtra("Project_id",userId+"_"+timestamp);
-        intent.putExtra("label","Contact");
-        // start the activity
-        startActivity(intent);
-    }
 }

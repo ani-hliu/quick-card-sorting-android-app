@@ -126,14 +126,7 @@ tools:context=".UxResearcher.UxReportActivity">
                 android:text="Enable"
                 />
 
-            <Button
-                android:id="@+id/commentButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="comment"
-                android:text="Comment"
-                android:textAllCaps="false" />
+
 
         </LinearLayout>
 

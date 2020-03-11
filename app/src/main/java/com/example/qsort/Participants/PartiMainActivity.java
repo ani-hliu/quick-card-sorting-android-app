@@ -59,7 +59,7 @@ public class PartiMainActivity extends AppCompatActivity {
 
 
         sortRecyclerView = findViewById(R.id.sortRecyclerView);
-        final SortAdapter myAdapter = new SortAdapter(PartiMainActivity.this,labelsArray,newArray,list);
+        final SortAdapter myAdapter = new SortAdapter(PartiMainActivity.this,labelsArray,newArray,list,project_id);
         layoutManager = new GridLayoutManager(PartiMainActivity.this, 1);
         sortRecyclerView.setLayoutManager(layoutManager);
         sortRecyclerView.setAdapter(myAdapter);submitSortButton.setOnClickListener(new View.OnClickListener() {
