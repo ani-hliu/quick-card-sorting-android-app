@@ -128,8 +128,8 @@ public class PartiWelcomeActivity extends AppCompatActivity {
     }
 
     public void scanQR(View view) {
-
-
+        startActivity(new Intent(getApplicationContext(), ScanQRActivity.class));
+        finish();
     }
 
     private void scanBarcodes(FirebaseVisionImage image) {
