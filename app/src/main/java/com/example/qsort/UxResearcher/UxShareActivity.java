@@ -56,7 +56,7 @@ public class UxShareActivity extends AppCompatActivity {
         setContentView(R.layout.activity_ux_share);
 
         uniqueCodeTextView = findViewById(R.id.uniqueCodeTextView);
-//        QRcodeButton = findViewById(R.id.QRcodeButton);
+        QRcode = findViewById(R.id.QRImageView);
         emailButton = findViewById(R.id.emailButton);
         emailTextView = findViewById(R.id.emailTextView);
 
@@ -66,16 +66,17 @@ public class UxShareActivity extends AppCompatActivity {
 
         uniqueCodeTextView.setText(projectID);
 
+        db = FirebaseFirestore.getInstance();
         db.collection("projects").document(projectID)
                 .addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot document, @Nullable FirebaseFirestoreException e) {
                 QRstr = document.getData().get("QRcodeRef").toString();
                 Log.d(TAG, document.getId() + " => " + document.getData());
+                Glide.with(UxShareActivity.this).load(QRstr).into(QRcode);
             }
         });
 
-        Glide.with(UxShareActivity.this).load(QRstr).into(QRcode);
 
         QRcode.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -100,17 +101,21 @@ public class UxShareActivity extends AppCompatActivity {
             // get SD card path
             String sdCardPath = Environment.getExternalStorageDirectory().getPath();
             // path of the file
+            System.out.println("sdcardpath"+sdCardPath);
             File file = new File(sdCardPath);
             File[] files = file.listFiles();
-            for (int i = 0; i < files.length; i++) {
-                File file1 = files[i];
-                String name = file1.getName();
-                if (name.endsWith(projectID+".png")) {
-                    boolean flag = file1.delete();
-//                    LogUtils.print("删除 + " + flag);
+
+            if(files!=null){
+                for (int i = 0; i < files.length; i++) {
+                    File file1 = files[i];
+                    String name = file1.getName();
+                    if (name.endsWith(projectID+".png")) {
+                        boolean flag = file1.delete();
+                    }
                 }
             }
-            String filePath = sdCardPath + "/projectID.png";
+
+            String filePath = sdCardPath + "/"+projectID+".png";
             file = new File(filePath);
             FileOutputStream os = new FileOutputStream(file);
             viewBitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
@@ -119,18 +124,19 @@ public class UxShareActivity extends AppCompatActivity {
 
             //insert the file into the system
             MediaStore.Images.Media.insertImage(getApplicationContext().getContentResolver(),
-                    file.getAbsolutePath(), "twocode.png", null);
+                    file.getAbsolutePath(), projectID+".png", null);
 
             //update the database after save the image
             Uri uri = Uri.fromFile(file);
             getApplicationContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
 
-            Toast.makeText(getApplicationContext(),"二维码保存成功",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),"QR code saved",Toast.LENGTH_SHORT).show();
 
             return filePath;
         }
         catch (IOException e) {
             e.printStackTrace();
+            System.out.println(e.toString());
             return "";
         }
 
