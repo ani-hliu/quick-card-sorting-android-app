@@ -11,7 +11,7 @@
     <string name="your_unique_code">Project unique code:</string>
     <string name="qr_code">QR Code</string>
     <string name="email">Email</string>
-    <string name="participant_s_email">Participants\' emails (,):</string>
+    <string name="participant_s_email">Participants\' emails:</string>
     <string name="welcome">Welcome</string>
     <string name="please_enter_your_unique_code">Please enter your unique code</string>
     <string name="enter">Enter</string>
