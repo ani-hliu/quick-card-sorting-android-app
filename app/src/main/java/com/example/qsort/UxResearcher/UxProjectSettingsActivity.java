@@ -265,22 +265,53 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
                     }
                 });
 
-//        generateQR();
+        generateQR();
     }
 
-//    @SuppressLint("LongLogTag")
-//    private void generateQR() {
-//        QRGEncoder qrgEncoder = new QRGEncoder(uid+"_"+timestamp, null, QRGContents.Type.TEXT, 150);
-//        try {
-//            // Getting QR-Code as Bitmap
-//            Bitmap bitmap = qrgEncoder.encodeAsBitmap();
-//
-//
-//        } catch (WriterException e) {
-//            Log.v(TAG, e.toString());
-//        }
-//
-//    }
+    @SuppressLint("LongLogTag")
+    private void generateQR() {
+        QRGEncoder qrgEncoder = new QRGEncoder(uid+"_"+timestamp, null, QRGContents.Type.TEXT, 150);
+        try {
+            // Getting QR-Code as Bitmap
+            Bitmap bitmap = qrgEncoder.encodeAsBitmap();
+
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+
+            String uid = FirebaseAuth.getInstance().getUid();
+            final StorageReference reference = FirebaseStorage.getInstance().getReference().child("QR_code").child(uid+"_"+timestamp+".jpeg");
+
+            reference.putBytes(byteArrayOutputStream.toByteArray()).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    getDownloadUrl(reference);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e(TAG, "OnFailure: ", e.getCause());
+                }
+            });
+
+        } catch (WriterException e) {
+            Log.v(TAG, e.toString());
+        }
+
+    }
+
+    private void getDownloadUrl(StorageReference reference){
+        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onSuccess(Uri uri) {
+                Log.d(TAG, "onSuccess: "+uri);
+
+                firebaseFirestore.collection("projects").document(uid+"_"+timestamp)
+                        .update("QRcodeRef",uri.toString());
+
+            }
+        });
+    }
 
     private void showMessage(String message) {
 
