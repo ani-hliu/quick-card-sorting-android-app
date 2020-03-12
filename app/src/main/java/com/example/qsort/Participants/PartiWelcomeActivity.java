@@ -80,10 +80,6 @@ public class PartiWelcomeActivity extends AppCompatActivity {
         }
         toProject(projectID);
     }
-//    public void backToWelcome(View view){
-//        startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
-//        finish();
-//    }
 
     @Override
     public void onBackPressed()

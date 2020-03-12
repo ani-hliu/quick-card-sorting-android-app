@@ -99,6 +99,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
         progresBar.setVisibility(View.VISIBLE);
 
         if(FLAG == true){
+            progresBar.setVisibility(View.INVISIBLE);
             Toast.makeText(this, "Please choose a project photo.", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -108,6 +109,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
              final String projectTitle = projectTitleTextView.getText().toString();
 
             if(TextUtils.isEmpty(categories) | TextUtils.isEmpty(labels) | TextUtils.isEmpty(projectTitle)){
+                progresBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(this, "Please fill all the blanks.", Toast.LENGTH_SHORT).show();
                 return;
             }

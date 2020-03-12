@@ -24,6 +24,7 @@ public class PartiMainActivity extends AppCompatActivity {
     String categories, labels, project_id;
     String[] labelsArray,categoriesArray;
     Button reviewSortButton;
+    SortAdapter myAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,7 @@ public class PartiMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_parti_main);
 
         reviewSortButton = findViewById(R.id.reviewSortButton);
+        sortRecyclerView = findViewById(R.id.sortRecyclerView);
 
         Intent intent = getIntent();
 
@@ -55,8 +57,7 @@ public class PartiMainActivity extends AppCompatActivity {
         }
 
 
-        sortRecyclerView = findViewById(R.id.sortRecyclerView);
-        final SortAdapter myAdapter = new SortAdapter(PartiMainActivity.this,labelsArray,newArray,list,project_id);
+        myAdapter = new SortAdapter(PartiMainActivity.this,labelsArray,newArray,list,project_id);
         layoutManager = new GridLayoutManager(PartiMainActivity.this, 1);
         sortRecyclerView.setLayoutManager(layoutManager);
         sortRecyclerView.setAdapter(myAdapter);

@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.qsort.R;
+import com.example.qsort.WelcomeActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -215,5 +216,13 @@ public class ScanQRActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(),message,Toast.LENGTH_LONG).show();
 
     }
+
+    @Override
+    public void onBackPressed()
+    {
+        startActivity(new Intent(getApplicationContext(), PartiWelcomeActivity.class));
+        finish();
+    }
+
 
 }
