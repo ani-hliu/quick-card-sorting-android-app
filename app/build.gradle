@@ -72,4 +72,6 @@ dependencies {
     implementation 'androidmads.library.qrgenearator:QRGenearator:1.0.3'
     implementation 'com.google.firebase:firebase-ml-vision:24.0.0'
     implementation 'com.google.firebase:firebase-ml-vision-barcode-model:16.0.1'
+    implementation 'com.wonderkiln:camerakit:0.13.1'
+    implementation 'com.github.d-max:spots-dialog:1.1@aar'
 }
