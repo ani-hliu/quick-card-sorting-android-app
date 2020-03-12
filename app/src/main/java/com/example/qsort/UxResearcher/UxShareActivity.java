@@ -67,6 +67,7 @@ public class UxShareActivity extends AppCompatActivity {
         uniqueCodeTextView.setText(projectID);
 
         db = FirebaseFirestore.getInstance();
+
         db.collection("projects").document(projectID)
                 .addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
             @Override
@@ -76,6 +77,7 @@ public class UxShareActivity extends AppCompatActivity {
                 Glide.with(UxShareActivity.this).load(QRstr).into(QRcode);
             }
         });
+
 
 
         QRcode.setOnLongClickListener(new View.OnLongClickListener() {
@@ -116,6 +118,7 @@ public class UxShareActivity extends AppCompatActivity {
             }
 
             String filePath = sdCardPath + "/"+projectID+".png";
+
             file = new File(filePath);
             FileOutputStream os = new FileOutputStream(file);
             viewBitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
@@ -132,11 +135,13 @@ public class UxShareActivity extends AppCompatActivity {
 
             Toast.makeText(getApplicationContext(),"QR code saved",Toast.LENGTH_SHORT).show();
 
+
             return filePath;
         }
         catch (IOException e) {
             e.printStackTrace();
             System.out.println(e.toString());
+
             return "";
         }
 
