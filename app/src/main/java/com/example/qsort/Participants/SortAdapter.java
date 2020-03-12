@@ -30,12 +30,16 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SortAdapter extends RecyclerView.Adapter<com.example.qsort.Participants.SortAdapter.MyViewHolder> {
     String[] labelList;
     String[] categoryList;
     String project_id;
+    ArrayAdapter<String> adapter;
+    Map<Integer, Integer> mSpinnerSelectedItem = new HashMap<Integer, Integer>();
 
     List<String> list;
     private Context mContext;
@@ -63,15 +67,25 @@ public class SortAdapter extends RecyclerView.Adapter<com.example.qsort.Particip
     public void onBindViewHolder(@NonNull final com.example.qsort.Participants.SortAdapter.MyViewHolder holder, final int position) {
 
         holder.labelToSort.setText(labelList[position]);
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>
+
+        adapter = new ArrayAdapter<String>
                 (mContext, android.R.layout.simple_spinner_item,
                         categoryList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         holder.categorySpinner.setAdapter(adapter);
+
+
+
+        if (mSpinnerSelectedItem.containsKey(position)) {
+            holder.categorySpinner.setSelection(mSpinnerSelectedItem.get(position));
+        }
+
         holder.categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int index, long id) {
                 list.set(position,parent.getItemAtPosition(index).toString());
+                mSpinnerSelectedItem.put(position, index);
+
                 System.out.println(position+":"+parent.getItemAtPosition(index).toString());
             }
 
@@ -97,7 +111,6 @@ public class SortAdapter extends RecyclerView.Adapter<com.example.qsort.Particip
 
     }
 
-
     @Override
     public int getItemCount() {
         return labelList.length;
@@ -116,5 +129,7 @@ public class SortAdapter extends RecyclerView.Adapter<com.example.qsort.Particip
             commentButton = itemView.findViewById(R.id.commentLinearLayout);
         }
     }
+
+
 
 }

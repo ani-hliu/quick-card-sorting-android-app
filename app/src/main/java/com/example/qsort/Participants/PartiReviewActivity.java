@@ -10,6 +10,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,13 +41,15 @@ public class PartiReviewActivity extends FragmentActivity {
     ViewPager viewPager;
     PagerAdapter pagerAdapter;
     String[] categoriesList,labelsArray,resultArray;
-
+    Button submitSortButton;
     FirebaseFirestore firebaseFirestore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parti_review);
+
+        submitSortButton = findViewById(R.id.submitSortButton);
 
         Intent intent = getIntent();
 
@@ -108,6 +111,9 @@ public class PartiReviewActivity extends FragmentActivity {
     }
 
     public void submitSort(View view){
+
+        submitSortButton.setEnabled(false);
+
         firebaseFirestore = FirebaseFirestore.getInstance();
 
         firebaseFirestore.collection("projects").document(project_id)
