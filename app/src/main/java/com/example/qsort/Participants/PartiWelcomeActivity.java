@@ -5,15 +5,20 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+//import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.util.SparseIntArray;
 import android.view.Surface;
@@ -37,6 +42,8 @@ import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcodeDetectorOption
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 public class PartiWelcomeActivity extends AppCompatActivity {
@@ -50,6 +57,8 @@ public class PartiWelcomeActivity extends AppCompatActivity {
     Boolean project_availability;
 
     FirebaseFirestore firebaseFirestore;
+    Uri pictureUri;
+    static int GALLERY_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,45 +78,7 @@ public class PartiWelcomeActivity extends AppCompatActivity {
             showMessage("Please enter your unique code");
             return;
         }
-        firebaseFirestore.collection("projects").document(projectID).get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if(task.isSuccessful()){
-                            DocumentSnapshot documentSnapshot = task.getResult();
-                            if(documentSnapshot.exists()){
-                                categories = documentSnapshot.getData().get("Categories").toString();
-                                labels = documentSnapshot.getData().get("Labels").toString();
-                                project_availability = documentSnapshot.getBoolean("Availability");
-
-                                if(project_availability){
-                                    Intent intent = new Intent(getApplicationContext(), PartiMainActivity.class);
-
-                                    intent.putExtra("Categories",categories);
-                                    intent.putExtra("Labels",labels);
-                                    intent.putExtra("project_id",projectID);
-
-                                    startActivity(intent);
-
-                                }
-                                else {
-                                    showMessage("Project is no longer available!");
-                                }
-
-
-
-                            }
-                            else{
-                                showMessage("Project does not exists!");
-                                enterCodeEditText.setText("");
-                            }
-                        }
-                        else{
-                            showMessage("Project does not exists!");
-                            enterCodeEditText.setText("");
-                        }
-                    }
-                });
+        toProject(projectID);
     }
 //    public void backToWelcome(View view){
 //        startActivity(new Intent(getApplicationContext(), WelcomeActivity.class));
@@ -131,6 +102,7 @@ public class PartiWelcomeActivity extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(), ScanQRActivity.class));
         finish();
     }
+
 
     private void scanBarcodes(FirebaseVisionImage image) {
         // [START set_detector_options]
@@ -192,7 +164,9 @@ public class PartiWelcomeActivity extends AppCompatActivity {
     }
 
     public void openQR(View view) {
-
+        Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        galleryIntent.setType("image/*");
+        startActivityForResult(galleryIntent,GALLERY_CODE);
     }
 
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
@@ -245,6 +219,137 @@ public class PartiWelcomeActivity extends AppCompatActivity {
                 Log.e(TAG, "Bad rotation value: " + rotationCompensation);
         }
         return result;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+
+        if (resultCode == RESULT_OK && requestCode == GALLERY_CODE && data != null) {
+
+            // the user has successfully picked an image
+            // we need to save its reference to a Uri variable
+            pictureUri = data.getData();
+//            projectPicture.setImageURI(pictureUri);
+
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), pictureUri);
+                runDetect(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+//            FLAG = false;
+        }
+
+    }
+
+    private void runDetect(Bitmap bitmap) {
+        FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(bitmap);
+        FirebaseVisionBarcodeDetectorOptions options =
+                new FirebaseVisionBarcodeDetectorOptions.Builder()
+                        .setBarcodeFormats(
+                                FirebaseVisionBarcode.FORMAT_QR_CODE)
+                        .build();
+
+        final FirebaseVisionBarcodeDetector detector = FirebaseVision.getInstance()
+                .getVisionBarcodeDetector();
+
+        Task<List<FirebaseVisionBarcode>> result = detector.detectInImage(image)
+                .addOnSuccessListener(new OnSuccessListener<List<FirebaseVisionBarcode>>() {
+                    @Override
+                    public void onSuccess(List<FirebaseVisionBarcode> barcodes) {
+                        // Task completed successfully
+                        // [START_EXCLUDE]
+                        // [START get_barcodes]
+                        for (FirebaseVisionBarcode barcode: barcodes) {
+                            Rect bounds = barcode.getBoundingBox();
+                            Point[] corners = barcode.getCornerPoints();
+
+                            String rawValue = barcode.getRawValue();
+
+                            int valueType = barcode.getValueType();
+                            // See API reference for complete list of supported types
+                            switch (valueType) {
+                                case FirebaseVisionBarcode.TYPE_WIFI:
+                                    String ssid = barcode.getWifi().getSsid();
+                                    String password = barcode.getWifi().getPassword();
+                                    int type = barcode.getWifi().getEncryptionType();
+                                    break;
+                                case FirebaseVisionBarcode.TYPE_URL:
+                                    String title = barcode.getUrl().getTitle();
+                                    String url = barcode.getUrl().getUrl();
+                                    break;
+                                case FirebaseVisionBarcode.TYPE_TEXT:
+//                                    AlertDialog.Builder builder = new AlertDialog.Builder(PartiWelcomeActivity.this);
+//                                    builder.setMessage(barcode.getRawValue());
+                                    projectID = barcode.getRawValue();
+                                    toProject(projectID);
+//                                    builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+//                                        @Override
+//                                        public void onClick(DialogInterface dialogInterface, int i) {
+//                                            dialogInterface.dismiss();
+//                                        }
+//                                    });
+//                                    AlertDialog dialog = builder.create();
+//                                    dialog.show();
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        // [END get_barcodes]
+                        // [END_EXCLUDE]
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Task failed with an exception
+                        Toast.makeText(PartiWelcomeActivity.this, "Firebase detect QR error", Toast.LENGTH_SHORT);
+                    }
+                });
+    }
+
+    public void toProject(final String projectID){
+        firebaseFirestore.collection("projects").document(projectID).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful()){
+                            DocumentSnapshot documentSnapshot = task.getResult();
+                            if(documentSnapshot.exists()){
+                                categories = documentSnapshot.getData().get("Categories").toString();
+                                labels = documentSnapshot.getData().get("Labels").toString();
+                                project_availability = documentSnapshot.getBoolean("Availability");
+
+                                if(project_availability){
+                                    Intent intent = new Intent(getApplicationContext(), PartiMainActivity.class);
+
+                                    intent.putExtra("Categories",categories);
+                                    intent.putExtra("Labels",labels);
+                                    intent.putExtra("project_id",projectID);
+
+                                    startActivity(intent);
+
+                                }
+                                else {
+                                    showMessage("Project is no longer available!");
+                                }
+
+                            }
+                            else{
+                                showMessage("Project does not exists!");
+                                enterCodeEditText.setText("");
+                            }
+                        }
+                        else{
+                            showMessage("Project does not exists!");
+                            enterCodeEditText.setText("");
+                        }
+                    }
+                });
     }
 
 }

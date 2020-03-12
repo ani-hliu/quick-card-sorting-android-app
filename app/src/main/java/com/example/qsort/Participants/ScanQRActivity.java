@@ -1,8 +1,8 @@
 package com.example.qsort.Participants;
 
-import android.app.Activity;
-import android.app.AlertDialog;
+//import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -13,9 +13,11 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.qsort.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.barcode.FirebaseVisionBarcode;
@@ -33,12 +35,17 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import dmax.dialog.SpotsDialog;
+//import dmax.dialog.SpotsDialog;
 
 public class ScanQRActivity extends AppCompatActivity {
     CameraView cameraView;
     Button btnDetect;
-    AlertDialog waitingDialogue;
+//    AlertDialog waitingDialogue;
+    String projectID;
+    FirebaseFirestore firebaseFirestore;
+
+    String categories, labels;
+    Boolean project_availability;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +55,8 @@ public class ScanQRActivity extends AppCompatActivity {
 
         cameraView = (CameraView)findViewById(R.id.cameraView);
         btnDetect = (Button)findViewById(R.id.btnDetect);
-        waitingDialogue = new SpotsDialog.Builder().setContext(this).setMessage("Please wait").setCancelable(false).build();
-
+//        waitingDialogue = new SpotsDialog.Builder().setContext(this).setMessage("Please wait").setCancelable(false).build();
+        firebaseFirestore = FirebaseFirestore.getInstance();
         btnDetect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -66,13 +73,12 @@ public class ScanQRActivity extends AppCompatActivity {
 
             @Override
             public void onError(CameraKitError cameraKitError) {
-
             }
 
             @Override
             public void onImage(CameraKitImage cameraKitImage) {
 
-                waitingDialogue.show();
+//                waitingDialogue.show();
                 Bitmap bitmap = cameraKitImage.getBitmap();
                 bitmap = Bitmap.createScaledBitmap(bitmap, cameraView.getWidth(), cameraView.getHeight(), false);
                 cameraView.stop();
@@ -126,22 +132,24 @@ public class ScanQRActivity extends AppCompatActivity {
                                     String url = barcode.getUrl().getUrl();
                                     break;
                                 case FirebaseVisionBarcode.TYPE_TEXT:
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(ScanQRActivity.this);
-                                    builder.setMessage(barcode.getRawValue());
-                                    builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            dialogInterface.dismiss();
-                                        }
-                                    });
-                                    AlertDialog dialog = builder.create();
-                                    dialog.show();
+//                                    AlertDialog.Builder builder = new AlertDialog.Builder(ScanQRActivity.this);
+//                                    builder.setMessage(barcode.getRawValue());
+                                    projectID = barcode.getRawValue();
+                                    toProject(projectID);
+//                                    builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+//                                        @Override
+//                                        public void onClick(DialogInterface dialogInterface, int i) {
+//                                            dialogInterface.dismiss();
+//                                        }
+//                                    });
+//                                    AlertDialog dialog = builder.create();
+//                                    dialog.show();
                                     break;
                                 default:
                                     break;
                             }
                         }
-                        waitingDialogue.dismiss();
+//                        waitingDialogue.dismiss();
                         // [END get_barcodes]
                         // [END_EXCLUDE]
                     }
@@ -166,5 +174,46 @@ public class ScanQRActivity extends AppCompatActivity {
         cameraView.stop();
     }
 
+    public void toProject(final String projectID){
+
+        firebaseFirestore.collection("projects").document(projectID).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful()){
+                            DocumentSnapshot documentSnapshot = task.getResult();
+                            if(documentSnapshot.exists()){
+                                categories = documentSnapshot.getData().get("Categories").toString();
+                                labels = documentSnapshot.getData().get("Labels").toString();
+                                project_availability = documentSnapshot.getBoolean("Availability");
+
+                                if(project_availability){
+                                    Intent intent = new Intent(getApplicationContext(), PartiMainActivity.class);
+
+                                    intent.putExtra("Categories",categories);
+                                    intent.putExtra("Labels",labels);
+                                    intent.putExtra("project_id",projectID);
+                                    startActivity(intent);
+                                }
+                                else {
+                                    showMessage("Project is no longer available!");
+                                }
+                            }
+                            else{
+                                showMessage("Project does not exists!");
+                            }
+                        }
+                        else{
+                            showMessage("Project does not exists!");
+                        }
+                    }
+                });
+    }
+
+    private void showMessage(String message) {
+
+        Toast.makeText(getApplicationContext(),message,Toast.LENGTH_LONG).show();
+
+    }
 
 }
