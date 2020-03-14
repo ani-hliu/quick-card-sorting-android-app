@@ -55,6 +55,7 @@ public class PartiWelcomeActivity extends AppCompatActivity {
     String projectID;
     String categories, labels;
     Boolean project_availability;
+    String project_name;
 
     FirebaseFirestore firebaseFirestore;
     Uri pictureUri;
@@ -319,6 +320,7 @@ public class PartiWelcomeActivity extends AppCompatActivity {
                                 categories = documentSnapshot.getData().get("Categories").toString();
                                 labels = documentSnapshot.getData().get("Labels").toString();
                                 project_availability = documentSnapshot.getBoolean("Availability");
+                                project_name = documentSnapshot.getData().get("Project Name").toString();
 
                                 if(project_availability){
                                     Intent intent = new Intent(getApplicationContext(), PartiMainActivity.class);
@@ -326,6 +328,7 @@ public class PartiWelcomeActivity extends AppCompatActivity {
                                     intent.putExtra("Categories",categories);
                                     intent.putExtra("Labels",labels);
                                     intent.putExtra("project_id",projectID);
+                                    intent.putExtra("project_name",project_name);
 
                                     startActivity(intent);
 
