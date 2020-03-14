@@ -5,9 +5,13 @@ import androidmads.library.qrgenearator.QRGSaver;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.net.Uri;
@@ -39,6 +43,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.File;
 
+import static android.widget.Toast.LENGTH_SHORT;
+
 public class UxShareActivity extends AppCompatActivity {
     private static final String TAG = "UxShareActivity";
 
@@ -49,6 +55,7 @@ public class UxShareActivity extends AppCompatActivity {
     ImageView QRcode;
     String QRstr = "";
     private FirebaseFirestore db;
+    private final int MY_PERMISSIONS_RECORD_AUDIO = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,52 +106,84 @@ public class UxShareActivity extends AppCompatActivity {
 //            e.printStackTrace();
 //        }
 
-        try {
-            // get SD card path
-            String sdCardPath = Environment.getExternalStorageDirectory().getPath();
-            // path of the file
-            System.out.println("sdcardpath"+sdCardPath);
-            File file = new File(sdCardPath);
-            File[] files = file.listFiles();
+        if(!checkPermissionFromDevice())
+            requestPermission();
 
-            if(files!=null){
-                for (int i = 0; i < files.length; i++) {
-                    File file1 = files[i];
-                    String name = file1.getName();
-                    if (name.endsWith(projectID+".png")) {
-                        boolean flag = file1.delete();
+        if (checkPermissionFromDevice()) {
+            try {
+                // get SD card path
+                String sdCardPath = Environment.getExternalStorageDirectory().getPath();
+                // path of the file
+                System.out.println("sdcardpath"+sdCardPath);
+                File file = new File(sdCardPath);
+                File[] files = file.listFiles();
+
+                if(files!=null){
+                    for (int i = 0; i < files.length; i++) {
+                        File file1 = files[i];
+                        String name = file1.getName();
+                        if (name.endsWith(projectID+".png")) {
+                            boolean flag = file1.delete();
+                        }
                     }
                 }
+
+                String filePath = sdCardPath + "/"+projectID+".png";
+
+                file = new File(filePath);
+                FileOutputStream os = new FileOutputStream(file);
+                viewBitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
+                os.flush();
+                os.close();
+
+                //insert the file into the system
+                MediaStore.Images.Media.insertImage(getApplicationContext().getContentResolver(),
+                        file.getAbsolutePath(), projectID+".png", null);
+
+                //update the database after save the image
+                Uri uri = Uri.fromFile(file);
+                getApplicationContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
+
+                Toast.makeText(getApplicationContext(),"QR code saved",Toast.LENGTH_SHORT).show();
+
+
+                return filePath;
             }
+            catch (IOException e) {
+                e.printStackTrace();
+                System.out.println(e.toString());
 
-            String filePath = sdCardPath + "/"+projectID+".png";
-
-            file = new File(filePath);
-            FileOutputStream os = new FileOutputStream(file);
-            viewBitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
-            os.flush();
-            os.close();
-
-            //insert the file into the system
-            MediaStore.Images.Media.insertImage(getApplicationContext().getContentResolver(),
-                    file.getAbsolutePath(), projectID+".png", null);
-
-            //update the database after save the image
-            Uri uri = Uri.fromFile(file);
-            getApplicationContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
-
-            Toast.makeText(getApplicationContext(),"QR code saved",Toast.LENGTH_SHORT).show();
-
-
-            return filePath;
+                return "";
+            }
         }
-        catch (IOException e) {
-            e.printStackTrace();
-            System.out.println(e.toString());
-
-            return "";
+        else{
+            Toast.makeText(getApplicationContext(),"Please give permission to save the QR code to gallery.",Toast.LENGTH_SHORT).show();
+            return "permission failed";
         }
 
+    }
+
+    private boolean checkPermissionFromDevice(){
+        int write_external_storage_result = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        return write_external_storage_result == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestPermission(){
+        ActivityCompat.requestPermissions(this, new String[]{
+                Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_RECORD_AUDIO);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case MY_PERMISSIONS_RECORD_AUDIO: {
+                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                    Toast.makeText(this, "Permission Granted", LENGTH_SHORT).show();
+                else
+                    Toast.makeText(this, "Permission Denied", LENGTH_SHORT).show();
+            }
+            break;
+        }
     }
 
     private Bitmap getViewBitmap(View view) {

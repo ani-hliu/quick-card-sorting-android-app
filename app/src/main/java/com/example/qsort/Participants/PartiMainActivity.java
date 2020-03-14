@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.qsort.R;
@@ -21,10 +22,11 @@ public class PartiMainActivity extends AppCompatActivity {
     RecyclerView sortRecyclerView;
     RecyclerView.LayoutManager layoutManager;
 
-    String categories, labels, project_id;
+    String categories, labels, project_id, project_name;
     String[] labelsArray,categoriesArray;
     Button reviewSortButton;
     SortAdapter myAdapter;
+    TextView projectLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,13 +35,16 @@ public class PartiMainActivity extends AppCompatActivity {
 
         reviewSortButton = findViewById(R.id.reviewSortButton);
         sortRecyclerView = findViewById(R.id.sortRecyclerView);
+        projectLabel = findViewById(R.id.cardSortingLabel);
 
         Intent intent = getIntent();
 
         categories = intent.getExtras().getString("Categories");
         labels = intent.getExtras().getString("Labels");
+        project_name = intent.getExtras().getString("project_name");
         project_id = intent.getExtras().getString("project_id");
 
+        projectLabel.setText(project_name);
         createRecyclerView();
 
     }
