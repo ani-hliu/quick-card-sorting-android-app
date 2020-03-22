@@ -3,6 +3,7 @@ package com.example.qsort.UxResearcher;
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -55,7 +57,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
     ProgressBar progresBar;
     private Boolean FLAG = true;
     String categoriesFinal,labelsFinal,projectTitleFinal;
-
+    String project_id;
 
     String uid;
     private FirebaseAuth mAuth;
@@ -66,6 +68,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
 
     FirebaseFirestore firebaseFirestore;
     StorageReference storageReference;
+    Salt salt = new Salt();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +97,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void submitProject(View view){
 
         progresBar.setVisibility(View.VISIBLE);
@@ -108,6 +112,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
              final String labels = labelsTextView.getText().toString();
              final String projectTitle = projectTitleTextView.getText().toString();
 
+
             if(TextUtils.isEmpty(categories) | TextUtils.isEmpty(labels) | TextUtils.isEmpty(projectTitle)){
                 progresBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(this, "Please fill all the blanks.", Toast.LENGTH_SHORT).show();
@@ -121,6 +126,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
                 String[] categoriesArray = categories.split("\n");
                 String[] labelsArray = labels.split("\n");
                 timestamp = String.valueOf(Timestamp.now().getSeconds());
+                project_id = salt.createCredential(uid+"_"+timestamp);
 
                 Map<String, Integer> categoriesMap = new HashMap<>();
                 categoriesMap.put("value",0);
@@ -130,13 +136,13 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
                 for (int i=0; i<labelsArray.length;i++){
                     Map<String, String> labelsMap = new HashMap<>();
                     labelsMap.put("id",labelsArray[i]);
-                    firebaseFirestore.collection("projects").document(uid+"_"+timestamp)
+                    firebaseFirestore.collection("projects").document(project_id)
                             .collection("labels").document(labelsArray[i]).set(labelsMap);
 
                     for (int j=0; j<categoriesArray.length;j++){
 //                label.put(categoriesArray[j],0);
 
-                        firebaseFirestore.collection("projects").document(uid+"_"+timestamp)
+                        firebaseFirestore.collection("projects").document(project_id)
                                 .collection("labels").document(labelsArray[i])
                                 .collection("categories").document(categoriesArray[j]).set(categoriesMap);
 
@@ -162,11 +168,6 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
                         }
                     });
                 }
-
-
-
-
-
             }
         }
     }
@@ -245,7 +246,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
     public void storeProject(String projectTitle, String uri, String labels, String categories){
         Map project = new HashMap<>();
         project.put("Project Name",projectTitle);
-        project.put("Project ID",uid+"_"+timestamp);
+        project.put("Project ID",project_id);
         project.put("Participants",0);
         project.put("Designer",uid);
         project.put("timestamp",timestamp);
@@ -254,14 +255,14 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
         project.put("Categories",categories);
         project.put("Availability", true);
 
-        firebaseFirestore.collection("projects").document(uid+"_"+timestamp).set(project)
+        firebaseFirestore.collection("projects").document(project_id).set(project)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
 
                         Intent intent = new Intent(getApplicationContext(),UxShareActivity.class);
 
-                        intent.putExtra("Project ID",uid+"_"+timestamp);
+                        intent.putExtra("Project ID",project_id);
                         // start the activity
                         startActivity(intent);
                     }
@@ -272,7 +273,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
 
     @SuppressLint("LongLogTag")
     private void generateQR() {
-        QRGEncoder qrgEncoder = new QRGEncoder(uid+"_"+timestamp, null, QRGContents.Type.TEXT, 150);
+        QRGEncoder qrgEncoder = new QRGEncoder(project_id, null, QRGContents.Type.TEXT, 150);
         try {
             // Getting QR-Code as Bitmap
             Bitmap bitmap = qrgEncoder.encodeAsBitmap();
@@ -281,7 +282,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
 
             String uid = FirebaseAuth.getInstance().getUid();
-            final StorageReference reference = FirebaseStorage.getInstance().getReference().child("QR_code").child(uid+"_"+timestamp+".jpeg");
+            final StorageReference reference = FirebaseStorage.getInstance().getReference().child("QR_code").child(project_id+".jpeg");
 
             reference.putBytes(byteArrayOutputStream.toByteArray()).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -308,7 +309,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
             public void onSuccess(Uri uri) {
                 Log.d(TAG, "onSuccess: "+uri);
 
-                firebaseFirestore.collection("projects").document(uid+"_"+timestamp)
+                firebaseFirestore.collection("projects").document(project_id)
                         .update("QRcodeRef",uri.toString());
 
             }
