@@ -74,8 +74,6 @@ public class SortAdapter extends RecyclerView.Adapter<com.example.qsort.Particip
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         holder.categorySpinner.setAdapter(adapter);
 
-
-
         if (mSpinnerSelectedItem.containsKey(position)) {
             holder.categorySpinner.setSelection(mSpinnerSelectedItem.get(position));
         }
