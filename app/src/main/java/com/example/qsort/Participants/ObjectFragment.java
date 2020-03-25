@@ -72,7 +72,7 @@ public class ObjectFragment extends Fragment {
 
         for (String s : list)
         {
-            listString += s + "\n";
+            listString += s + "\n\n";
         }
 
         return listString;

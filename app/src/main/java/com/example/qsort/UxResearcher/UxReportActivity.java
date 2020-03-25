@@ -237,7 +237,7 @@ public class UxReportActivity extends AppCompatActivity {
 
         Intent intent = new Intent(getApplicationContext(),UxShareActivity.class);
 
-        intent.putExtra("Project ID",userId+"_"+timestamp);
+        intent.putExtra("Project ID",project_id);
         // start the activity
         startActivity(intent);
     }
@@ -252,6 +252,7 @@ public class UxReportActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Toast.makeText(getApplicationContext(), "You've choosen to delete all records", Toast.LENGTH_SHORT).show();
+                db.collection("projects").document(project_id).delete();
                 db.collection("projects").document(project_id).delete();
                 startActivity(new Intent(getApplicationContext(),UxMainActivity.class));
             }

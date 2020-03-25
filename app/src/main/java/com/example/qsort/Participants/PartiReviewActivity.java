@@ -106,7 +106,6 @@ public class PartiReviewActivity extends FragmentActivity {
     @Override
     public void onBackPressed()
     {
-        startActivity(new Intent(getApplicationContext(), PartiWelcomeActivity.class));
         finish();
     }
 
@@ -160,6 +159,7 @@ public class PartiReviewActivity extends FragmentActivity {
         Toast.makeText(getApplicationContext(),message,Toast.LENGTH_LONG).show();
 
     }
+
 
 }
 
