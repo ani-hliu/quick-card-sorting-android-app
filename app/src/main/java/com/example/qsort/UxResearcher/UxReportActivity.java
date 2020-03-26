@@ -69,7 +69,8 @@ public class UxReportActivity extends AppCompatActivity {
     private String project_id = "";
     String noParticipants;
     Context context;
-
+    List<String> category_result;
+    Map<String, String> map;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,11 +129,6 @@ public class UxReportActivity extends AppCompatActivity {
         });
 
     }
-
-//    public void backToMain(View view){
-//        startActivity(new Intent(getApplicationContext(),UxMainActivity.class));
-//        finish();
-//    }
 
     @Override
     public void onBackPressed()
@@ -228,9 +224,6 @@ public class UxReportActivity extends AppCompatActivity {
                         }
                     }
                 });
-
-        // store state
-//        recyclerViewState = labelButtonRecyclerView.getLayoutManager().onSaveInstanceState();
     }
 
     public void shareCode(View view){
@@ -265,6 +258,8 @@ public class UxReportActivity extends AppCompatActivity {
             }
         });
 
+
+
         builder.show();
 
     }
@@ -275,6 +270,47 @@ public class UxReportActivity extends AppCompatActivity {
         intent.putExtra("which_label",labelLabel.getText());
         intent.putExtra("project_id",project_id);
         startActivity(intent);
+    }
+
+    public void reviewProject(View view){
+//        map = new HashMap<>();
+
+        Bundle extras = new Bundle();
+
+
+        category_result = new ArrayList<>();
+
+        for(final String label: list){
+            db.collection("projects").document(project_id)
+                    .collection("labels").document(label)
+                    .collection("categories")
+                    .orderBy("value",Query.Direction.DESCENDING)
+                    .limit(1)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                            if(task.isSuccessful()){
+                                for (QueryDocumentSnapshot document : task.getResult()){
+                                    category_result.add(document.getId());
+                                }
+                                if(category_result.size()==list.size()){
+                                    Intent intent = new Intent(getApplicationContext(),UxTabReviewActivity.class);
+                                    intent.putExtra("Labels", list.toString());
+                                    intent.putExtra("Category", category_result.toString());
+                                    intent.putExtra("project_id",project_id);
+                                    startActivity(intent);
+                                }
+                            }
+                        }
+                    });
+
+
+
+        }
+
+
     }
 
 }

@@ -185,11 +185,6 @@ public class UxRegisterActivity extends AppCompatActivity implements View.OnClic
                 });
     }
 
-//    public void backToLogin(View view){
-//        startActivity(new Intent(getApplicationContext(), UxLoginActivity.class));
-//        finish();
-//    }
-
     @Override
     public void onBackPressed()
     {
