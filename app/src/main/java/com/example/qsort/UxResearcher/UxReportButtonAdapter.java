@@ -68,7 +68,6 @@ public class UxReportButtonAdapter extends RecyclerView.Adapter<UxReportButtonAd
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             labelButton = itemView.findViewById(R.id.labelReportButton);
-//            labelButton.setBackgroundColor(Color.GRAY);
             linearlayout = itemView.findViewById(R.id.linear);
         }
     }

@@ -130,6 +130,13 @@ tools:context=".UxResearcher.UxReportActivity">
                 android:textAllCaps="false"
                 android:onClick="deleteProject"/>
 
+            <Button
+                android:id="@+id/uxReviewButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="reviewProject"
+                android:text="@string/review" />
+
 
         </LinearLayout>
 
