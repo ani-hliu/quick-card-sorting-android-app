@@ -12,8 +12,6 @@
         android:background="@drawable/button_effect"
         android:onClick="displayRank"
         android:text="@string/label"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:backgroundTint="#16661A"
         android:textAllCaps="false"
         android:fontFamily="@font/lato"
 

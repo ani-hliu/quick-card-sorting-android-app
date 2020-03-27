@@ -46,11 +46,14 @@ public class UxTabReviewActivity extends AppCompatActivity {
 
         labels = labels.replaceAll("[\\[\\]\\(\\)]","");
         categories = categories.replaceAll("[\\[\\]\\(\\)]","");
+        System.out.println("----LABELS"+labels);
 
-        labelList = labels.split(",");
+        labelList = labels.split(", ");
         categoriesList = categories.split(", ");
-
-
+        System.out.println("Length:"+categoriesList.length);
+        for(int i=0; i<categoriesList.length; i++){
+            System.out.println(categoriesList[i]);
+        }
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseFirestore.collection("projects").document(project_id).get()
@@ -61,26 +64,14 @@ public class UxTabReviewActivity extends AppCompatActivity {
                             DocumentSnapshot document = task.getResult();
                             categoryTitle = document.getData().get("Categories").toString();
                             categoriesTitleList = categoryTitle.split("\n");
-
                         }
-
                         result = new StringBuilder();
-
                         for(int i=0; i<categoriesTitleList.length; i++){
                             for(int j=0; j<categoriesList.length; j++){
-                                temp_cate_lst = categoriesList[j].split("%");
-                                for(int k=0; k<temp_cate_lst.length; k++){
-//                                    System.out.println(categoriesTitleList[i]+" ? "+temp_cate_lst[k]);
-                                    if(categoriesTitleList[i].equals(temp_cate_lst[k])){
-                                        result.append(labelList[j]+"\n");
-//                                        System.out.println("~~~ same");
-                                    }
+                                if(categoriesTitleList[i].equals(categoriesList[j])){
+                                    result.append(labelList[j]+"\n");
+//                                    System.out.println("Find equal:::"+labelList[j]+","+categoriesTitleList[i]);
                                 }
-//                                if(categoriesTitleList[i].equals(categoriesList[j])){
-//                                    result.append(labelList[j]+"\n");
-//                                    System.out.println(labelList[j]+","+categoriesTitleList[i]);
-//
-//                                }
                             }
                             result.append(",");
                         }
@@ -90,7 +81,6 @@ public class UxTabReviewActivity extends AppCompatActivity {
                         viewPager.setAdapter(pagerAdapter);
                     }
                 });
-
 
     }
 

@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -59,8 +60,9 @@ public class UxReportActivity extends AppCompatActivity {
     private Switch enableSwitch;
     private Button viewCommentsButton;
 
+
     private int maxValue = -1;
-    private String temp_result = "";
+//    private String temp_result = "";
 
     ArrayList<String> list = new ArrayList<>();
 
@@ -70,6 +72,10 @@ public class UxReportActivity extends AppCompatActivity {
     Context context;
     List<String> category_result, label_result;
     Map<String, String> map;
+    StringBuilder temp_result;
+    String max_category;
+    int count;
+    int number_of_categories;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,6 +103,7 @@ public class UxReportActivity extends AppCompatActivity {
 
         labelLabel = findViewById(R.id.reportResult);
         categoryRank = findViewById(R.id.categoriesRank);
+        categoryRank.setMovementMethod(ScrollingMovementMethod.getInstance());
         displayProjectsInfo();
         displayProjectLabelButton();
 
@@ -220,6 +227,7 @@ public class UxReportActivity extends AppCompatActivity {
                             labelLabel.setText(labelButtonText);
                             categoryRank.setText(categoriesRank);
 
+
                         }
                     }
                 });
@@ -275,8 +283,7 @@ public class UxReportActivity extends AppCompatActivity {
 //        map = new HashMap<>();
 
         Bundle extras = new Bundle();
-
-
+        count=0;
         category_result = new ArrayList<>();
         label_result = new ArrayList<>();
 
@@ -293,9 +300,14 @@ public class UxReportActivity extends AppCompatActivity {
 
                             if(task.isSuccessful()){
                                 for (QueryDocumentSnapshot document : task.getResult()){
+//                                    temp_result = new StringBuilder();
+//                                    temp_result.append(document.getId());
 //                                    category_result.add(document.getId());
-                                    label_result.add(label);
+//                                    label_result.add(label);
                                     maxValue = Integer.parseInt(document.getData().get("value").toString());
+                                    max_category = document.getId();
+                                    number_of_categories = 0;
+//                                    System.out.println("value:"+maxValue);
                                 }
                                 db.collection("projects").document(project_id)
                                         .collection("labels").document(label)
@@ -307,19 +319,29 @@ public class UxReportActivity extends AppCompatActivity {
                                             @Override
                                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                                 if(task.isSuccessful()){
-                                                    temp_result = "";
+                                                    number_of_categories = task.getResult().size();
                                                     for (QueryDocumentSnapshot document : task.getResult()){
-                                                        temp_result += document.getId()+"%";
-                                                        System.out.println("!!!!!!!!temp_result: "+temp_result);
+                                                        if(number_of_categories==1){
+                                                            category_result.add(document.getId());
+                                                            label_result.add(label);
+                                                        }else{
+                                                            category_result.add(document.getId());
+                                                            label_result.add(label+"*");
+                                                        }
+
+
                                                     }
-                                                    category_result.add(temp_result);
-                                                    if(category_result.size()==list.size()){
-                                                        Intent intent = new Intent(getApplicationContext(),UxTabReviewActivity.class);
-                                                        intent.putExtra("Labels", label_result.toString());
-                                                        intent.putExtra("Category", category_result.toString());
-                                                        intent.putExtra("project_id",project_id);
-                                                        startActivity(intent);
-                                                    }
+
+                                                }
+                                                count++;
+                                                if(count==list.size()){
+
+                                                    System.out.println("size:"+label_result.size()+","+category_result.size());
+                                                    Intent intent = new Intent(getApplicationContext(),UxTabReviewActivity.class);
+                                                    intent.putExtra("Labels", label_result.toString());
+                                                    intent.putExtra("Category", category_result.toString());
+                                                    intent.putExtra("project_id",project_id);
+                                                    startActivity(intent);
                                                 }
                                             }
                                         });
