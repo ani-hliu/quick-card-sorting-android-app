@@ -31,6 +31,8 @@ public class UxTabReviewActivity extends AppCompatActivity {
     StringBuilder result;
     FirebaseFirestore firebaseFirestore;
 
+    String[] temp_cate_lst;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +66,15 @@ public class UxTabReviewActivity extends AppCompatActivity {
 
                         result = new StringBuilder();
 
+                        for(int g=0; g<labelList.length; g++){
+                            System.out.println("!!!!!!!!!! labelList"+ labelList[g]);
+                        }
+                        for(int g=0; g<categoriesList.length; g++){
+                            System.out.println("!!!!!!!!!! categoriesList"+ categoriesList[g]);
+                        }
+
                         for(int i=0; i<categoriesTitleList.length; i++){
                             for(int j=0; j<categoriesList.length; j++){
-//                                System.out.println(categoriesTitleList[i]+"+"+categoriesList[j]);
                                 if(categoriesTitleList[i].equals(categoriesList[j])){
                                     result.append(labelList[j]+"\n");
                                     System.out.println(labelList[j]+","+categoriesTitleList[i]);
@@ -76,7 +84,6 @@ public class UxTabReviewActivity extends AppCompatActivity {
                             result.append(",");
                         }
 
-                        System.out.println(result.toString());
                         viewPager = (ViewPager) findViewById(R.id.ux_pager);
                         pagerAdapter = new UxTabReviewActivity.PagerAdapter(getSupportFragmentManager());
                         viewPager.setAdapter(pagerAdapter);
