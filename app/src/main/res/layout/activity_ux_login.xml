@@ -67,6 +67,8 @@
         android:layout_marginTop="50dp"
         android:text="Sign in"
         android:gravity="center"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:backgroundTint="#16661A"
         android:textAllCaps="false"/>
 
     <TextView
@@ -86,6 +88,8 @@
         android:text="Sign up"
         android:layout_marginTop="10dp"
         android:textAllCaps="false"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:backgroundTint="#16661A"
         android:gravity="center" />
 
     <ProgressBar

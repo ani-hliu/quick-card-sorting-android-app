@@ -293,16 +293,9 @@ public class UxReportActivity extends AppCompatActivity {
 
                             if(task.isSuccessful()){
                                 for (QueryDocumentSnapshot document : task.getResult()){
-                                    category_result.add(document.getId());
+//                                    category_result.add(document.getId());
                                     label_result.add(label);
-                                }
-                                if(category_result.size()==list.size()){
-                                    Intent intent = new Intent(getApplicationContext(),UxTabReviewActivity.class);
-                                    intent.putExtra("Labels", label_result.toString());
-                                    intent.putExtra("Category", category_result.toString());
-                                    intent.putExtra("project_id",project_id);
-                                    startActivity(intent);
-
+                                    maxValue = Integer.parseInt(document.getData().get("value").toString());
                                 }
                                 db.collection("projects").document(project_id)
                                         .collection("labels").document(label)
@@ -313,7 +306,6 @@ public class UxReportActivity extends AppCompatActivity {
                                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                             @Override
                                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
                                                 if(task.isSuccessful()){
                                                     temp_result = "";
                                                     for (QueryDocumentSnapshot document : task.getResult()){
@@ -323,7 +315,7 @@ public class UxReportActivity extends AppCompatActivity {
                                                     category_result.add(temp_result);
                                                     if(category_result.size()==list.size()){
                                                         Intent intent = new Intent(getApplicationContext(),UxTabReviewActivity.class);
-                                                        intent.putExtra("Labels", list.toString());
+                                                        intent.putExtra("Labels", label_result.toString());
                                                         intent.putExtra("Category", category_result.toString());
                                                         intent.putExtra("project_id",project_id);
                                                         startActivity(intent);

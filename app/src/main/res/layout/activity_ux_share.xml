@@ -90,6 +90,8 @@
         android:layout_marginTop="12dp"
         android:onClick="shareEmail"
         android:text="@string/email"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:backgroundTint="#16661A"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

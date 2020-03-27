@@ -66,20 +66,21 @@ public class UxTabReviewActivity extends AppCompatActivity {
 
                         result = new StringBuilder();
 
-                        for(int g=0; g<labelList.length; g++){
-                            System.out.println("!!!!!!!!!! labelList"+ labelList[g]);
-                        }
-                        for(int g=0; g<categoriesList.length; g++){
-                            System.out.println("!!!!!!!!!! categoriesList"+ categoriesList[g]);
-                        }
-
                         for(int i=0; i<categoriesTitleList.length; i++){
                             for(int j=0; j<categoriesList.length; j++){
-                                if(categoriesTitleList[i].equals(categoriesList[j])){
-                                    result.append(labelList[j]+"\n");
-                                    System.out.println(labelList[j]+","+categoriesTitleList[i]);
-
+                                temp_cate_lst = categoriesList[j].split("%");
+                                for(int k=0; k<temp_cate_lst.length; k++){
+//                                    System.out.println(categoriesTitleList[i]+" ? "+temp_cate_lst[k]);
+                                    if(categoriesTitleList[i].equals(temp_cate_lst[k])){
+                                        result.append(labelList[j]+"\n");
+//                                        System.out.println("~~~ same");
+                                    }
                                 }
+//                                if(categoriesTitleList[i].equals(categoriesList[j])){
+//                                    result.append(labelList[j]+"\n");
+//                                    System.out.println(labelList[j]+","+categoriesTitleList[i]);
+//
+//                                }
                             }
                             result.append(",");
                         }

@@ -22,6 +22,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Play"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:backgroundTint="#16661A"
         android:textAllCaps="false"/>
 
     <Button
@@ -31,6 +33,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Stop"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:backgroundTint="#16661A"
         android:textAllCaps="false"/>
 
 </LinearLayout>

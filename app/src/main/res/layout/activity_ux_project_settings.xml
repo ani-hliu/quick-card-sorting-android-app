@@ -72,6 +72,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:backgroundTint="#16661A"
         android:onClick="submitProject"
         android:text="@string/submit"
         app:layout_constraintEnd_toEndOf="parent"
