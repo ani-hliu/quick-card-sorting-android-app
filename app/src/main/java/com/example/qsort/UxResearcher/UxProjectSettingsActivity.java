@@ -140,8 +140,6 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
                             .collection("labels").document(labelsArray[i]).set(labelsMap);
 
                     for (int j=0; j<categoriesArray.length;j++){
-//                label.put(categoriesArray[j],0);
-
                         firebaseFirestore.collection("projects").document(project_id)
                                 .collection("labels").document(labelsArray[i])
                                 .collection("categories").document(categoriesArray[j]).set(categoriesMap);

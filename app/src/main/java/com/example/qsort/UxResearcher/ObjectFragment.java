@@ -44,7 +44,6 @@ public class ObjectFragment extends Fragment {
 
         Bundle args = getArguments();
         result = args.getString(RESULT_KEY);
-//        System.out.println(result);
         labels = args.getString(LABEL_KEY);
         title = args.getString("title");
         resultArray = result.split(",");
