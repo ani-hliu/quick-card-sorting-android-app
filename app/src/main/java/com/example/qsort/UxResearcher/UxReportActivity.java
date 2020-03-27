@@ -19,6 +19,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.text.SimpleDateFormat;
@@ -67,7 +68,7 @@ public class UxReportActivity extends AppCompatActivity {
     private String project_id = "";
     String noParticipants;
     Context context;
-    List<String> category_result;
+    List<String> category_result, label_result;
     Map<String, String> map;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -277,6 +278,7 @@ public class UxReportActivity extends AppCompatActivity {
 
 
         category_result = new ArrayList<>();
+        label_result = new ArrayList<>();
 
         for(final String label: list){
             db.collection("projects").document(project_id)
@@ -291,7 +293,16 @@ public class UxReportActivity extends AppCompatActivity {
 
                             if(task.isSuccessful()){
                                 for (QueryDocumentSnapshot document : task.getResult()){
-                                    maxValue = Integer.parseInt(document.getData().get("value").toString());
+                                    category_result.add(document.getId());
+                                    label_result.add(label);
+                                }
+                                if(category_result.size()==list.size()){
+                                    Intent intent = new Intent(getApplicationContext(),UxTabReviewActivity.class);
+                                    intent.putExtra("Labels", label_result.toString());
+                                    intent.putExtra("Category", category_result.toString());
+                                    intent.putExtra("project_id",project_id);
+                                    startActivity(intent);
+
                                 }
                                 db.collection("projects").document(project_id)
                                         .collection("labels").document(label)
