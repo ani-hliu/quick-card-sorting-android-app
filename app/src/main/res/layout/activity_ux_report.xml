@@ -117,6 +117,8 @@ tools:context=".UxResearcher.UxReportActivity">
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:backgroundTint="#16661A"
                 android:onClick="shareCode"
                 android:text="Share"
                 android:textAllCaps="false" />
@@ -126,6 +128,8 @@ tools:context=".UxResearcher.UxReportActivity">
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:backgroundTint="#16661A"
                 android:text="Delete"
                 android:textAllCaps="false"
                 android:onClick="deleteProject"/>
@@ -137,7 +141,6 @@ tools:context=".UxResearcher.UxReportActivity">
                 android:layout_height="wrap_content"
                 android:backgroundTint="#16661A"
                 android:onClick="reviewProject"
-                android:style="?attr/materialButtonOutlinedStyle"
                 android:text="@string/review"
                 android:textAllCaps="false" />
 
@@ -238,6 +241,8 @@ tools:context=".UxResearcher.UxReportActivity">
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="viewComments"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:backgroundTint="#16661A"
                 android:text="View Comments" />
         </LinearLayout>
 
