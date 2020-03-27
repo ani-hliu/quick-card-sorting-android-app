@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -325,6 +326,7 @@ public class UxReportActivity extends AppCompatActivity {
                                                 if(task.isSuccessful()){
                                                     number_of_categories = task.getResult().size();
                                                     for (QueryDocumentSnapshot document : task.getResult()){
+
                                                         if(number_of_categories==1){
                                                             category_result.add(document.getId());
                                                             label_result.add(label);
@@ -332,8 +334,6 @@ public class UxReportActivity extends AppCompatActivity {
                                                             category_result.add(document.getId());
                                                             label_result.add(label+"*");
                                                         }
-
-
                                                     }
 
                                                 }
@@ -353,13 +353,9 @@ public class UxReportActivity extends AppCompatActivity {
                         }
                     });
 
-
-
-
-
         }
-
-
+        category_result.clear();
+        label_result.clear();
     }
 
 }
