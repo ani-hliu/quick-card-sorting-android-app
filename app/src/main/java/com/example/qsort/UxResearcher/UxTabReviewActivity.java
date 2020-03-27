@@ -69,13 +69,14 @@ public class UxTabReviewActivity extends AppCompatActivity {
 //                                System.out.println(categoriesTitleList[i]+"+"+categoriesList[j]);
                                 if(categoriesTitleList[i].equals(categoriesList[j])){
                                     result.append(labelList[j]+"\n");
+                                    System.out.println(labelList[j]+","+categoriesTitleList[i]);
 
                                 }
                             }
                             result.append(",");
                         }
 
-//                        System.out.println(result.toString());
+                        System.out.println(result.toString());
                         viewPager = (ViewPager) findViewById(R.id.ux_pager);
                         pagerAdapter = new UxTabReviewActivity.PagerAdapter(getSupportFragmentManager());
                         viewPager.setAdapter(pagerAdapter);
