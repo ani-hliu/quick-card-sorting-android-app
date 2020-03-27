@@ -4,16 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -25,12 +22,10 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Date;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.bumptech.glide.Glide;
-import com.example.qsort.Participants.CommentActivity;
 import com.example.qsort.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -62,6 +57,9 @@ public class UxReportActivity extends AppCompatActivity {
     private Button labelButton;
     private Switch enableSwitch;
     private Button viewCommentsButton;
+
+    private int maxValue = -1;
+    private String temp_result = "";
 
     ArrayList<String> list = new ArrayList<>();
 
@@ -293,18 +291,40 @@ public class UxReportActivity extends AppCompatActivity {
 
                             if(task.isSuccessful()){
                                 for (QueryDocumentSnapshot document : task.getResult()){
-                                    category_result.add(document.getId());
+                                    maxValue = Integer.parseInt(document.getData().get("value").toString());
                                 }
-                                if(category_result.size()==list.size()){
-                                    Intent intent = new Intent(getApplicationContext(),UxTabReviewActivity.class);
-                                    intent.putExtra("Labels", list.toString());
-                                    intent.putExtra("Category", category_result.toString());
-                                    intent.putExtra("project_id",project_id);
-                                    startActivity(intent);
-                                }
+                                db.collection("projects").document(project_id)
+                                        .collection("labels").document(label)
+                                        .collection("categories")
+                                        .whereGreaterThanOrEqualTo("value", maxValue)
+                                        .orderBy("value",Query.Direction.DESCENDING)
+                                        .get()
+                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                                                if(task.isSuccessful()){
+                                                    temp_result = "";
+                                                    for (QueryDocumentSnapshot document : task.getResult()){
+                                                        temp_result += document.getId()+"%";
+                                                        System.out.println("!!!!!!!!temp_result: "+temp_result);
+                                                    }
+                                                    category_result.add(temp_result);
+                                                    if(category_result.size()==list.size()){
+                                                        Intent intent = new Intent(getApplicationContext(),UxTabReviewActivity.class);
+                                                        intent.putExtra("Labels", list.toString());
+                                                        intent.putExtra("Category", category_result.toString());
+                                                        intent.putExtra("project_id",project_id);
+                                                        startActivity(intent);
+                                                    }
+                                                }
+                                            }
+                                        });
                             }
                         }
                     });
+
+
 
 
 

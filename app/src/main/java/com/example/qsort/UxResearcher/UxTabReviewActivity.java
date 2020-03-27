@@ -31,6 +31,8 @@ public class UxTabReviewActivity extends AppCompatActivity {
     StringBuilder result;
     FirebaseFirestore firebaseFirestore;
 
+    String[] temp_cate_lst;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,18 +66,28 @@ public class UxTabReviewActivity extends AppCompatActivity {
 
                         result = new StringBuilder();
 
+                        for(int g=0; g<labelList.length; g++){
+                            System.out.println("!!!!!!!!!! labelList"+ labelList[g]);
+                        }
+                        for(int g=0; g<categoriesList.length; g++){
+                            System.out.println("!!!!!!!!!! categoriesList"+ categoriesList[g]);
+                        }
+
                         for(int i=0; i<categoriesTitleList.length; i++){
                             for(int j=0; j<categoriesList.length; j++){
-//                                System.out.println(categoriesTitleList[i]+"+"+categoriesList[j]);
-                                if(categoriesTitleList[i].equals(categoriesList[j])){
-                                    result.append(labelList[j]+"\n");
-
+                                if(labelList[j].equals(" Programs of Study"))
+                                    System.out.println("!!!!!!!!!! Programs of Study");
+                                temp_cate_lst = categoriesList[j].split("%");
+                                for(int k=0; k<temp_cate_lst.length; k++){
+                                    System.out.println(categoriesTitleList[i]+" ? "+temp_cate_lst[k]);
+                                    if(categoriesTitleList[i].equals(temp_cate_lst[k])){
+                                        result.append(labelList[j]+"\n");
+                                        System.out.println("~~~ same");
+                                    }
                                 }
                             }
                             result.append(",");
                         }
-
-//                        System.out.println(result.toString());
                         viewPager = (ViewPager) findViewById(R.id.ux_pager);
                         pagerAdapter = new UxTabReviewActivity.PagerAdapter(getSupportFragmentManager());
                         viewPager.setAdapter(pagerAdapter);
