@@ -197,10 +197,13 @@ public class UxShareActivity extends AppCompatActivity {
         String subject = "Your Qsort Invitation";
         String message = "Hello participant,\nYour unique code is "+projectID+"\nHave a nice day!";
 
+        Uri myUri = Uri.parse(QRstr);
+
         Intent intent  = new Intent(Intent.ACTION_SEND);
         intent.putExtra(intent.EXTRA_EMAIL,email);
         intent.putExtra(intent.EXTRA_SUBJECT,subject);
         intent.putExtra(intent.EXTRA_TEXT,message);
+        intent.putExtra(intent.EXTRA_STREAM, myUri);
 
         intent.setType("message/rfc822");
         startActivity(intent);
