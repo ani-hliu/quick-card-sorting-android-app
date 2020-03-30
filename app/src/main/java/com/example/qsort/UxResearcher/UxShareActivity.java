@@ -196,13 +196,11 @@ public class UxShareActivity extends AppCompatActivity {
         String[] email = emailList.split(",");
 
         String link_val = QRstr;
-        String body = "<a href=\"" + link_val + "\">" + "click here" + "</a>";
+        String body = "<a href=\"" + link_val + "\">" + QRstr + "</a>";
 
 
         String subject = "Your Qsort Invitation";
         String message = "Hello participant,\n\nYour unique code is "+projectID+"\n\nThis is a link to the QR code: \n"+Html.fromHtml(body)+"\n\nHave a nice day!";
-
-//        Uri myUri = Uri.parse(QRstr);
 
         Intent intent  = new Intent(Intent.ACTION_SEND);
         intent.setType("text/html");
