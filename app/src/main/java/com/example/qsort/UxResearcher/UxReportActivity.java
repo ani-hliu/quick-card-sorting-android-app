@@ -59,6 +59,7 @@ public class UxReportActivity extends AppCompatActivity {
     private Button labelButton;
     private Switch enableSwitch;
     private Button viewCommentsButton;
+    DocumentReference documentReference;
 
 
     private int maxValue = -1;
@@ -104,6 +105,9 @@ public class UxReportActivity extends AppCompatActivity {
         labelLabel = findViewById(R.id.reportResult);
         categoryRank = findViewById(R.id.categoriesRank);
         categoryRank.setMovementMethod(ScrollingMovementMethod.getInstance());
+
+        documentReference = db.collection("projects").document(project_id);
+
         displayProjectsInfo();
         displayProjectLabelButton();
 
@@ -145,31 +149,32 @@ public class UxReportActivity extends AppCompatActivity {
 
     public void displayProjectsInfo(){
 
-        final DocumentReference documentReference = db.collection("projects").document(project_id);
         documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if(documentSnapshot!=null && documentSnapshot.exists()){
+                    noParticipants = documentSnapshot.getData().get("Participants").toString();
+                    projectName.setText(documentSnapshot.getData().get("Project Name").toString());
+                    projectPartiNum.setText(documentSnapshot.getData().get("Participants").toString());
+                    reportUniqueCode.setText(documentSnapshot.getData().get("Project ID").toString());
 
-                noParticipants = documentSnapshot.getData().get("Participants").toString();
-                projectName.setText(documentSnapshot.getData().get("Project Name").toString());
-                projectPartiNum.setText(documentSnapshot.getData().get("Participants").toString());
-                reportUniqueCode.setText(documentSnapshot.getData().get("Project ID").toString());
+                    timestamp = documentSnapshot.getData().get("timestamp").toString();
 
-                timestamp = documentSnapshot.getData().get("timestamp").toString();
+                    Long timestampLong = Long.parseLong(String.valueOf(timestamp));
+                    if (timestampLong < 10000000000L) {
+                        timestampLong = timestampLong * 1000;
+                    }
 
-                Long timestampLong = Long.parseLong(String.valueOf(timestamp));
-                if (timestampLong < 10000000000L) {
-                    timestampLong = timestampLong * 1000;
+                    SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+                    Date date = new Date(Long.parseLong(String.valueOf(timestampLong)));
+                    String sd = sf.format(new Date(Long.parseLong(String.valueOf(timestampLong))));
+                    projectTime.setText(sd);
+
+
+
+                    Glide.with(UxReportActivity.this).load(documentSnapshot.getString("Project Picture")).into(projectView);
                 }
 
-                SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-                Date date = new Date(Long.parseLong(String.valueOf(timestampLong)));
-                String sd = sf.format(new Date(Long.parseLong(String.valueOf(timestampLong))));
-                projectTime.setText(sd);
-
-
-
-                Glide.with(UxReportActivity.this).load(documentSnapshot.getString("Project Picture")).into(projectView);
             }
         });
 
@@ -253,8 +258,7 @@ public class UxReportActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 Toast.makeText(getApplicationContext(), "You've choosen to delete all records", Toast.LENGTH_SHORT).show();
                 db.collection("projects").document(project_id).delete();
-                db.collection("projects").document(project_id).delete();
-                startActivity(new Intent(getApplicationContext(),UxMainActivity.class));
+                startActivity(new Intent(UxReportActivity.this,UxMainActivity.class));
             }
         });
 
