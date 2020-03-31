@@ -361,7 +361,7 @@ public class UxReportActivity extends AppCompatActivity {
         label_result.clear();
     }
 
-    public void showCommentNumber(String labelButtonText){
+    public void showCommentNumber(final String labelButtonText){
         count_comments = 0;
         db.collection("projects").document(project_id).collection("labels")
                 .document(labelButtonText).collection("text_comments")
@@ -371,23 +371,24 @@ public class UxReportActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             count_comments = count_comments+task.getResult().size();
+
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
-                    }
-                });
-        db.collection("projects").document(project_id).collection("labels")
-                .document(labelButtonText).collection("voice_comments")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            count_comments = count_comments+ task.getResult().size();
-                            viewCommentsButton.setText("View Comments ("+count_comments+")");
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
+                        db.collection("projects").document(project_id).collection("labels")
+                                .document(labelButtonText).collection("voice_comments")
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            count_comments = count_comments+ task.getResult().size();
+                                            viewCommentsButton.setText("View Comments ("+count_comments+")");
+                                        } else {
+                                            Log.d(TAG, "Error getting documents: ", task.getException());
+                                        }
+                                    }
+                                });
                     }
                 });
 
