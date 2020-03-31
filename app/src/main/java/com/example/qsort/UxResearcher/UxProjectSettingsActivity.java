@@ -18,6 +18,7 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -58,7 +59,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
     private Boolean FLAG = true;
     String categoriesFinal,labelsFinal,projectTitleFinal;
     String project_id;
-
+    Button submitButton;
     String uid;
     private FirebaseAuth mAuth;
 
@@ -79,6 +80,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
         projectTitleTextView = findViewById(R.id.projectTitleTextView);
         projectPicture = findViewById(R.id.projectPicture);
         progresBar = findViewById(R.id.progressBarProject);
+        submitButton = findViewById(R.id.submitButton);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
 
@@ -101,10 +103,13 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
     public void submitProject(View view){
 
         progresBar.setVisibility(View.VISIBLE);
+        submitButton.setEnabled(false);
+
 
         if(FLAG == true){
             progresBar.setVisibility(View.INVISIBLE);
             Toast.makeText(this, "Please choose a project photo.", Toast.LENGTH_SHORT).show();
+            submitButton.setEnabled(true);
             return;
         }
         else{
@@ -116,6 +121,7 @@ public class UxProjectSettingsActivity extends AppCompatActivity {
             if(TextUtils.isEmpty(categories) | TextUtils.isEmpty(labels) | TextUtils.isEmpty(projectTitle)){
                 progresBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(this, "Please fill all the blanks.", Toast.LENGTH_SHORT).show();
+                submitButton.setEnabled(true);
                 return;
             }
             else{
