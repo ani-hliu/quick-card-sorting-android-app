@@ -31,3 +31,14 @@ comments.
 Qsort can manage the card sorting results from all participants and give analyzed feedback
 to UX designers.
 
+## Contributions
+#### Joseph Olayemi (UX Specialist)
+
+
+I contributed by proposing the project idea, researched and designed preliminary UI features and functions. As a specialist, I also provided field expertise related to the project. Carried out functional testing of the features and provided feedback to the team.
+#### Hongyu Liu (Programmer)
+
+Project creation, Share by email, Review card sorting results, Card sorting experiments, Manage project.
+#### Ran Wang (Programmer)
+
+Card sorting comments, QR code generation and detection, User authentication, Access the project.
